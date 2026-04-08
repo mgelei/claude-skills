@@ -17,8 +17,11 @@ jobs:
         run: |
           zip prompt-architect.zip \
             prompt-architect/SKILL.md
+          zip looking-glass.zip \
+            looking-glass/SKILL.md \
+            looking-glass/outfit-checklist.md
 
       - name: Upload to release
-        run: gh release upload "${{ github.event.release.tag_name }}" prompt-architect.zip
+        run: gh release upload "${{ github.event.release.tag_name }}" prompt-architect.zip looking-glass.zip
         env:
           GH_TOKEN: ${{ github.token }}
