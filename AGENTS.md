@@ -1,0 +1,4 @@
+- The Github CLI `gh` is available to interact with the repo and its issues and PRs
+- Always pin actions to their full commit SHA — never use version tags (e.g. `@v4`)
+- Prefer 1st party GitHub Actions (`actions/*`); use 3rd party only when absolutely necessary
+- Always declare an explicit `permissions:` block in every workflow (the default is read-only)

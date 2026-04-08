@@ -1,0 +1,24 @@
+name: Package Skills
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Build zip
+        run: |
+          zip skills.zip \
+            prompt-architect/SKILL.md
+
+      - name: Upload to release
+        run: gh release upload "${{ github.event.release.tag_name }}" skills.zip
+        env:
+          GH_TOKEN: ${{ github.token }}
