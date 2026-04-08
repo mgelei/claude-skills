@@ -15,10 +15,10 @@ jobs:
 
       - name: Build zip
         run: |
-          zip skills.zip \
+          zip prompt-architect.zip \
             prompt-architect/SKILL.md
 
       - name: Upload to release
-        run: gh release upload "${{ github.event.release.tag_name }}" skills.zip
+        run: gh release upload "${{ github.event.release.tag_name }}" prompt-architect.zip
         env:
           GH_TOKEN: ${{ github.token }}
