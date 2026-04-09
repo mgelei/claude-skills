@@ -110,8 +110,11 @@ def main() -> None:
     if instructions == "-":
         instructions = sys.stdin.read().strip()
 
-    # Load API key from .env
-    load_dotenv(SCRIPT_DIR / ".env")
+    # Load API key from .env in script dir or the parent dir (next to the zip)
+    env_path = SCRIPT_DIR / ".env"
+    if not env_path.exists():
+        env_path = SCRIPT_DIR.parent / ".env"
+    load_dotenv(env_path)
     api_key = os.environ.get("GOOGLE_API_KEY", "")
     if not api_key:
         print(
