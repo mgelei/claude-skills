@@ -19,7 +19,11 @@ jobs:
             prompt-architect/SKILL.md
           zip looking-glass.zip \
             looking-glass/SKILL.md \
-            looking-glass/outfit-checklist.md
+            looking-glass/outfit-checklist.md \
+            looking-glass/system-prompt.md \
+            looking-glass/analyze.py \
+            looking-glass/requirements.txt \
+            looking-glass/.env.example
 
       - name: Upload to release
         run: gh release upload "${{ github.event.release.tag_name }}" prompt-architect.zip looking-glass.zip
