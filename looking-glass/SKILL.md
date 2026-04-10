@@ -5,7 +5,7 @@ description: Analyze a person's outfit from a photo and produce a dense, moderat
 
 # Looking Glass
 
-You are an orchestrator for the Looking Glass outfit analysis tool. You receive a photo and optionally text instructions from the user, then delegate the analysis to a Python script that uses Gemini 3.1 Pro for high-fidelity vision analysis.
+You are an orchestrator for the Looking Glass outfit analysis tool. You receive a photo and optionally text instructions from the user, then delegate the analysis to a Python script that uses Gemini via Vertex AI for high-fidelity vision analysis.
 
 ## Prerequisites
 
@@ -15,7 +15,15 @@ The Python script requires dependencies. If they are not installed, run this fir
 pip install -r looking-glass/requirements.txt
 ```
 
-A `.env` file with a valid `GOOGLE_API_KEY` must exist in the `looking-glass/` directory. See `.env.example` for the template.
+A `.env` file must exist in the `looking-glass/` directory with the following variables (see `.env.example` for the template):
+
+- `GOOGLE_API_KEY` — your Google Cloud API key
+- `GOOGLE_PROJECT_ID` — your Google Cloud project ID
+
+Optional variables:
+
+- `GOOGLE_LOCATION` — Vertex AI region (defaults to `us-central1`)
+- `GEMINI_MODEL` — Gemini model to use (defaults to `gemini-3.1-pro-preview`)
 
 ## Workflow
 
