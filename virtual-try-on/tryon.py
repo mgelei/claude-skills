@@ -141,11 +141,12 @@ def main() -> None:
             model="gpt-image-1.5",
             image=(filename, image_data, mime_type),
             prompt=instructions,
-            quality="high",
+            quality="auto",
             input_fidelity="high",
             size="auto",
             output_format="png",
             n=1,
+            extra_body={"moderation": "low"},
         )
     except Exception as e:
         error_msg = sanitize_output(str(e), api_key)
