@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Analyze an outfit photo using Gemini 3.1 Pro and produce a reproduction prompt."""
+"""Analyze an outfit photo using Gemini via Vertex AI and produce a reproduction prompt."""
 
 import argparse
 import mimetypes
@@ -15,6 +15,7 @@ from google.genai import types
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
+DEFAULT_MODEL = "gemini-3.1-pro-preview"
 MAX_IMAGE_SIZE = 20 * 1024 * 1024  # 20 MB inline upload limit
 
 SUPPORTED_MIME_TYPES = {
@@ -92,7 +93,7 @@ def sanitize_output(text: str, api_key: str) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Analyze an outfit photo using Gemini 3.1 Pro"
+        description="Analyze an outfit photo using Gemini via Vertex AI"
     )
     parser.add_argument(
         "--image",
@@ -110,12 +111,15 @@ def main() -> None:
     if instructions == "-":
         instructions = sys.stdin.read().strip()
 
-    # Load API key from .env in script dir or the parent dir (next to the zip)
+    # Load configuration from .env in script dir or the parent dir (next to the zip)
     env_path = SCRIPT_DIR / ".env"
     if not env_path.exists():
         env_path = SCRIPT_DIR.parent / ".env"
     load_dotenv(env_path)
+
     api_key = os.environ.get("GOOGLE_API_KEY", "")
+    model = os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
+
     if not api_key:
         print(
             "Error: GOOGLE_API_KEY not set. "
@@ -135,11 +139,14 @@ def main() -> None:
     if instructions:
         user_parts.append(types.Part.from_text(text=instructions))
 
-    client = genai.Client(api_key=api_key)
+    client = genai.Client(
+        vertexai=True,
+        api_key=api_key,
+    )
 
     try:
         response = client.models.generate_content(
-            model="gemini-3.1-pro-preview",
+            model=model,
             contents=[types.Content(role="user", parts=user_parts)],
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
@@ -170,6 +177,14 @@ def main() -> None:
     except Exception as e:
         error_msg = sanitize_output(str(e), api_key)
         print(f"Error: Gemini API call failed: {error_msg}", file=sys.stderr)
+        if "403" in str(e) or "Forbidden" in str(e):
+            print(
+                "\nTroubleshooting tips for 403 Forbidden:\n"
+                "  1. Ensure the Vertex AI API is enabled on your Google Cloud project.\n"
+                f"  2. Verify your API key has access to model '{model}'.\n"
+                "  3. Check that your API key has no restrictions blocking this environment.",
+                file=sys.stderr,
+            )
         sys.exit(1)
 
     # Surface detailed error information for blocked or empty responses
