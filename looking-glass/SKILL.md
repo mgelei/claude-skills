@@ -15,14 +15,12 @@ The Python script requires dependencies. If they are not installed, run this fir
 pip install -r looking-glass/requirements.txt
 ```
 
-A `.env` file must exist in the `looking-glass/` directory with the following variables (see `.env.example` for the template):
+A `.env` file must exist in the `looking-glass/` directory with your Vertex AI API key (see `.env.example` for the template):
 
-- `GOOGLE_API_KEY` — your Google Cloud API key
-- `GOOGLE_PROJECT_ID` — your Google Cloud project ID
+- `GOOGLE_API_KEY` — your Vertex AI API key (created in Google Cloud Console)
 
 Optional variables:
 
-- `GOOGLE_LOCATION` — Vertex AI region (defaults to `us-central1`)
 - `GEMINI_MODEL` — Gemini model to use (defaults to `gemini-3.1-pro-preview`)
 
 ## Workflow

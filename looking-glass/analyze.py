@@ -16,7 +16,6 @@ from google.genai import types
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 DEFAULT_MODEL = "gemini-3.1-pro-preview"
-DEFAULT_LOCATION = "us-central1"
 MAX_IMAGE_SIZE = 20 * 1024 * 1024  # 20 MB inline upload limit
 
 SUPPORTED_MIME_TYPES = {
@@ -119,22 +118,12 @@ def main() -> None:
     load_dotenv(env_path)
 
     api_key = os.environ.get("GOOGLE_API_KEY", "")
-    project_id = os.environ.get("GOOGLE_PROJECT_ID", "")
-    location = os.environ.get("GOOGLE_LOCATION", DEFAULT_LOCATION)
     model = os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
 
     if not api_key:
         print(
             "Error: GOOGLE_API_KEY not set. "
             "Create a .env file in the looking-glass directory with your key. "
-            "See .env.example for the template.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    if not project_id:
-        print(
-            "Error: GOOGLE_PROJECT_ID not set. "
-            "Add your Google Cloud project ID to the .env file. "
             "See .env.example for the template.",
             file=sys.stderr,
         )
@@ -152,8 +141,6 @@ def main() -> None:
 
     client = genai.Client(
         vertexai=True,
-        project=project_id,
-        location=location,
         api_key=api_key,
     )
 
@@ -194,10 +181,8 @@ def main() -> None:
             print(
                 "\nTroubleshooting tips for 403 Forbidden:\n"
                 "  1. Ensure the Vertex AI API is enabled on your Google Cloud project.\n"
-                f"  2. Verify your API key belongs to project '{project_id}'.\n"
-                f"  3. Check that model '{model}' is available in region '{location}'.\n"
-                "  4. Confirm your API key has no IP or referrer restrictions that "
-                "block this environment.",
+                f"  2. Verify your API key has access to model '{model}'.\n"
+                "  3. Check that your API key has no restrictions blocking this environment.",
                 file=sys.stderr,
             )
         sys.exit(1)
