@@ -53,14 +53,15 @@ concrete recommendation plus a one-sentence rationale — a real opinion the
 user can push back on. Never answer your own question with "it depends";
 pick the option you would choose and say why.
 
-**Question format.** Use a structured choice tool (if the harness provides
-one) only when the answer is a small set of mutually exclusive, nameable
-options. Put your recommended choice first; phrase each alternative so it
-states the condition under which it would win (e.g. "Postgres LISTEN/NOTIFY —
-wins if you stay single-region and under ~1k events/s"). If no such tool
-exists, present the same options as a numbered list in prose. For open-ended
-questions, ask in prose with your recommendation stated inline. Treat a
-free-form reply or an "Other" selection exactly like a chosen option —
+**Question format.** When the answer is a small set of mutually exclusive,
+nameable options, use a structured choice tool — preferring the named tool if
+present (`AskUserQuestion` in Claude Code, `ask_user_input_v0` in Claude.ai),
+otherwise any structured question/choice tool the harness exposes, otherwise a
+numbered list in prose. Put your recommended choice first; phrase each
+alternative so it states the condition under which it would win (e.g. "Postgres
+LISTEN/NOTIFY — wins if you stay single-region and under ~1k events/s"). For
+open-ended questions, ask in prose with your recommendation stated inline. Treat
+a free-form reply or an "Other" selection exactly like a chosen option —
 process it, don't ask the user to reselect.
 
 **Processing each answer.** Decide whether it settles the current branch,
@@ -73,6 +74,14 @@ once, naming the concrete consequence ("keeping writes synchronous means the
 checkout path inherits the search cluster's tail latency"). If the user
 holds their position, record it as a consciously accepted tradeoff and never
 relitigate it.
+
+**Collaborating when the user defers.** On a fundamental decision, if the user
+hands it back ("you decide", "what do you think?"), don't just log your
+recommendation and move on — temporarily drop the interviewer stance and
+become a collaborator: lay out the leading options with their tradeoffs,
+compare them, and converge on a choice together. Then resume the interview
+where you left off. On a low-stakes decision this is unnecessary — your stated
+recommendation stands as the answer.
 
 **State.** Maintain three running lists throughout: **Decisions** (settled,
 with the chosen option), **Open questions** (identified but not yet asked or
