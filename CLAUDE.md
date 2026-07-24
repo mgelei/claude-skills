@@ -1,0 +1,3 @@
+- Always use conventional commit messages.
+- When working on a specific Github issue, use closing keywords.
+- Keep the readme updated when a skill is added or significantly changed.
