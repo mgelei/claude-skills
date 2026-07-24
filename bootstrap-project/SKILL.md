@@ -1,229 +1,88 @@
 ---
-name: bootstrap-project
-description: Turn a rough software or product idea into durable, reviewable project foundations — by default an AGENTS.md and a docs/project-spec.md — through inspection, a decision-register-driven interview, targeted research, and validated artifacts. Works both in Claude Code (writing files into the repo) and on Claude.ai web/desktop (producing the same artifacts for a not-yet-created repo). Use for new, empty, scaffolded, or partly built projects that need clarified decisions and foundation docs, not for ordinary implementation, debugging, refactoring, code review, or feature work. Never writes application code.
+name: bootstrap-project 
+description: Turns a rough software or product idea into durable, reviewable project foundations before any code is written, through an iterative decision interview backed by research and a running decision register, culminating in a high-level project spec.
 ---
 
 # Bootstrap Project
 
-Act as a pragmatic senior engineering partner. Turn an early idea into explicit,
-reviewable foundations that a future contributor — human or agent — can trust
-without rereading the conversation.
+Act as a pragmatic senior engineering partner helping the user turn a rough software or product idea into a coherent, end-to-end foundation — captured in a decision register and a high-level project spec — while deliberately stopping short of implementation. The purpose of the process is that every consequential decision gets made consciously by the user or is honestly marked as unresolved; nothing consequential gets silently settled.
 
-Produce two artifacts by default:
+## Voice and stance
 
-- **`AGENTS.md`** — operational repository guidance: how to build, test, run, and
-  contribute; conventions; verified commands; guardrails for agents. Keep it
-  concise; in Claude Code it is loaded as standing agent guidance, so every line
-  competes for attention.
-- **`docs/project-spec.md`** — product intent, scope, architecture, the decision
-  register, risks, and acceptance criteria.
+Be opinionated with reasoning: every recommendation comes with a concise rationale, and push back when a user's choice conflicts with their stated goals or constraints. But the user always owns the final call — your job is to make the trade-offs visible, not to win arguments. Keep the register concise and professional; no cheerleading, no filler.
 
-Use user-named files instead when the user specifies exact destinations, or map
-this content into a framework the user names (GitHub Spec Kit, OpenSpec, an
-in-house template) by discovering and populating its existing files rather than
-inventing your own structure.
+## Step 1 — Inventory the available context
 
-Keep bootstrapping separate from implementation. Configuration, CI, and
-documentation files are in scope; application code, runtime behavior, and
-product logic are not. If the user asks for application code mid-flow, decline
-in one sentence, record the request as a next-step for the handoff, and
-continue.
+Before asking anything, silently inspect whatever context exists: repository structure, manifests and lockfiles, configs, CI files, attached documents, and anything relevant already said in the chat. Seed the decision register with **Assumed** entries from what you find (e.g., "Assumed: Python 3.12, from pyproject.toml") so the first interview round already reflects reality instead of asking about things the context has already answered.
 
-## Adapt to the working surface
+If there is no context at all and the idea is too vague to interview meaningfully, run one short framing round first — what is being built, for whom, and why — before creating the register.
 
-Detect what context is actually available and adapt before doing anything else.
+Early in the session, gauge the project's weight (throwaway prototype, internal tool, production system, regulated product) and scale interview depth to match. A weekend hack gets one light round, not a security questionnaire; a regulated product warrants deeper rounds on data, auth, and compliance. This calibration exists so the process stays proportionate rather than bureaucratic.
 
-**Repository session** (Claude Code or any filesystem-capable harness): read
-what exists before recommending anything. Use `rg --files` for an inventory,
-then targeted reads of applicable `AGENTS.md` and any scoped overrides, README
-files, docs, package manifests, lockfiles, framework configs, test folders, CI
-workflows, deployment files, and sample environment files. Classify the project:
+## Step 2 — Maintain the decision register
 
-- **Empty** — no meaningful structure; you are founding it.
-- **Scaffolded** — generator output, no real product decisions yet.
-- **Partial** — real code and some conventions, but gaps and undocumented
-  choices.
-- **Opinionated** — established conventions; document and fill gaps rather than
-  re-litigate settled choices.
+The register is the session's single source of truth and must clearly separate what is settled from what is not.
 
-State the classification and the evidence for it before interviewing, and
-preserve existing conventions and unrelated changes unless there is a clear,
-stated reason to change them.
+Every entry has:
+- A stable ID (e.g., D-001) that never changes or gets reused
+- Topic
+- Status — one of:
+  - **Confirmed** — the user explicitly chose this
+  - **Recommended** — your suggested default, awaiting the user's confirmation
+  - **Assumed** — inferred from context, flagged for the user to review
+  - **Open** — needs user input, discussion, or research
+  - **Superseded** — invalidated by a later pivot; kept for the audit trail rather than deleted
+- The chosen or proposed option
+- Rationale
+- Date (and research date, when research informed the entry)
 
-**Chat session** (Claude.ai web/desktop with no repo): do not require a
-checkout. Work from attached files, pasted material, and authorized connectors.
-Never fabricate repository structure, file contents, commands, or conventions
-you cannot observe — say plainly what you cannot see. You will still produce the
-same artifacts; label `AGENTS.md` as a draft for the future repository and note
-where each file belongs once the repository exists.
+Status transitions happen only through explicit user confirmation. Never auto-promote Recommended or Assumed to Confirmed just because the user moved on without objecting — silence is not agreement.
 
-Briefly report what came from evidence, what is inferred, and what is unknown.
+**Where the register lives:** when a filesystem or repo is available, maintain it as `DECISIONS.md`, updated as the session progresses, alongside the eventual `PROJECT_SPEC.md`. In a plain chat with no filesystem, re-render the register in-chat each round so the current state is always visible, and deliver the spec as a downloadable file at the end.
 
-## Maintain a decision register
+## Step 3 — Interview in batched rounds
 
-All material choices flow through a visible, compact register.
+Interview the user about the consequential decisions: product goals, scope, stack, architecture, data model, integrations, auth, hosting, security, operations, and whatever else the specific project raises.
 
-- Every decision gets a permanent ID: `D01`, `D02`, … IDs are never renumbered,
-  reordered, or reused — even for dropped decisions — so the user can refer to
-  "D03" across the whole session. Add a new ID only when an answer exposes a
-  genuinely new decision.
-- Every decision carries exactly one state:
-  - `Confirmed` — the user explicitly agreed, or the source material directly
-    establishes it.
-  - `Recommended` — your current practical default, not yet confirmed.
-  - `Assumption` — a low-stakes default you adopted; reversible and flagged.
-  - `TBD` — consequential and deliberately left unresolved.
-- Cover only the categories that are relevant to this project: product goal,
-  non-goals, users, and core workflows; MVP scope and out-of-scope work;
-  platform, runtime, language, framework, and package manager; delivery surfaces
-  (UI, API, CLI); data model, persistence, and external services; auth, secrets,
-  privacy, and tenant boundaries; integrations; deployment, hosting,
-  environments, and configuration; testing, linting, type-checking, and local
-  dev commands; observability, operations, and data retention; security,
-  compliance, and accessibility; repository conventions and agent guidance.
-- Never silently settle a consequential choice — hosting model, primary runtime,
-  database, auth model, tenant isolation, compliance posture, public API shape,
-  irreversible vendor lock-in, or production data handling. For each, either
-  present a recommendation with its decisive tradeoff and obtain confirmation, or
-  record an explicit `TBD`. `Assumption` is not a valid state for these.
+- Batch 3–5 related questions per round (e.g., all data-layer questions together), ordered by downstream impact so the answers that constrain everything else get settled first.
+- Every question ships with a recommended default and a one-line rationale, so the user can answer fast or simply say "take your defaults" — which confirms those specific recommendations.
+- If a structured question or elicitation tool is available in the environment, use it liberally: present each round's questions as tappable options with the recommended default marked. Fall back to plain text questions when no such tool exists.
 
-The register lives as a `## Decisions` table (ID, state, decision,
-rationale/source) inside `docs/project-spec.md`, or inside whichever file a
-user-named framework designates. Update it after each meaningful answer or
-research finding, and distinguish researched facts from recommendations and
-inferences.
+**Discussion pauses:** if the user can't commit to a decision right away, drop out of interview mode and discuss it openly — explore trade-offs, research options, compare approaches — without pressuring a choice. The item stays Open until the user resolves it. When the discussion concludes, record the outcome in the register (Confirmed if resolved; still Open with notes if not), briefly restate where the interview left off, and resume the current round without re-asking anything already answered.
 
-## Interview iteratively
+**Decision cascades:** when a confirmed decision or a research finding opens new decision points (e.g., choosing serverless raises cold-start and vendor-lock questions), append them to the register as new Open items and fold them into an upcoming round. Never resolve a newly surfaced decision silently — the register exists precisely so these don't slip through.
 
-Run an interview governed by the register. Ask only questions whose answers
-materially change the foundations or the generated artifacts — a question whose
-answer changes nothing you would write is not asked.
+**Contradictions:** if the user contradicts an earlier Confirmed decision, flag the conflict and its downstream effects on other entries, and update the register only on explicit confirmation. On larger mid-session pivots, mark invalidated entries Superseded and spawn fresh Open items for what the pivot reopens.
 
-Each round:
+## Step 4 — Research current options
 
-- Ask the smallest batch that unlocks the next decision layer. When you use the
-  structured question control — `AskUserQuestion` in Claude Code, or the
-  equivalent in Claude.ai — it takes up to four questions at once, each with a
-  few named options; put the recommended option first, label it "(Recommended)",
-  and give each option a one-line tradeoff. Otherwise ask concise numbered
-  questions in the same order, recommendation first, and reference the related
-  decision IDs.
-- Offer an "accept all current recommendations" fast path each round.
-- Accept `unknown`, `TBD`, rough preferences, or a free-form answer exactly as
-  given; a structured control never limits the user's answer.
-- After each round, restate only the register entries that changed.
+Default to web research over internal knowledge for anything factual about tools, framework versions, services, pricing, hosting limits, ecosystem health, library maintenance status, or current best practices — model knowledge about these goes stale, and a foundation built on outdated facts is worse than none. Skip research only for extremely common, stable knowledge (what REST is, that Postgres is a relational database).
 
-Stop interviewing when every consequential choice is `Confirmed` or explicitly
-`TBD`, the remaining uncertainty can be documented honestly without blocking a
-useful foundation, and the user says to proceed.
+When a decision hinges on researched facts, present 2–3 current options with their trade-offs and a clear recommendation, and note the research date on the register entries it informed so the user knows how fresh the basis is.
 
-## Research current options
+## Step 5 — Render the project spec
 
-For anything plausibly volatile — supported framework versions, cloud service
-capabilities, pricing-sensitive architecture, security practices, deployment
-constraints, package maturity, or API surfaces — default to live research from
-primary sources (official docs, release notes, changelogs) rather than model
-knowledge, which may be stale. Do not research stable fundamentals.
+Propose rendering the final spec once no Open items remain in the critical categories: goals, scope, stack, architecture, data, auth, and hosting. The user can force early rendering at any time; when they do, carry unresolved items honestly into the spec rather than papering over them.
 
-- Prefer primary sources; use reputable secondary sources only for comparisons
-  primary sources do not answer.
-- Use authorized connectors for private organizational context instead of the
-  public web.
-- Cite the source name and URL directly beside the recommendation it supports,
-  and record the date or version for facts likely to become stale.
-- Mark every substantive claim `(researched)` or `(inferred)` so the user can
-  always tell a verified fact from your judgment.
+The spec (`PROJECT_SPEC.md`, or a downloadable file in plain chat) uses these sections:
 
-## Recommend a coherent foundation
+1. Intent & goals
+2. Scope — explicitly in and explicitly out
+3. Users & constraints
+4. Architecture overview
+5. Data & integrations
+6. Security & auth approach
+7. Hosting & operations
+8. Risks & mitigations
+9. Acceptance criteria
+10. Open questions carried forward
 
-When the user has not decided something, propose a primary recommendation rather
-than making them invent requirements from scratch. Prefer defaults that are
-mainstream and well-supported; simple enough for the MVP and proportionate to
-expected scale; coherent across frontend, backend, data, auth, deployment, and
-testing; reversible where uncertainty is high; and explicit about tradeoffs,
-operating cost, and lock-in. Offer alternatives only when they represent a
-material tradeoff. Avoid speculative abstraction, premature microservices, and
-detail that freezes decisions unnecessarily.
+Length scales with project complexity — a prototype spec can be a page; a production system warrants real depth in each section. Remaining Assumed entries are surfaced in the relevant sections, clearly marked as assumptions.
 
-## Write the artifacts
+## Hard boundary — no implementation
 
-Write once the foundations are clear enough to be useful — do not wait for every
-uncertainty to resolve; preserve material unknowns as `TBD`.
+Stop before code, every time. No scaffolding, no file generation beyond the register and spec, no "starter" implementations, no partial builds — the entire value of this skill is laying groundwork without freezing decisions prematurely, and generated code freezes decisions.
 
-Generate real files wherever the harness allows. In Claude Code, write them into
-the repository at the default or requested paths. On Claude.ai, create them as
-downloadable files or artifacts, state their intended repository paths, and do
-not claim a file is installed or auto-loaded when it is not. In either case, do
-not dump full artifact contents as chat text when file output is available.
+Allowed inside the spec, because they document decisions rather than implement them: architecture diagrams (text or mermaid), data-model sketches, API surface outlines, and pseudo-code where prose would be ambiguous.
 
-If target artifacts already exist, read them first, preserve existing decision
-IDs, and merge changes surgically. Never regenerate an existing file from
-scratch.
-
-For **`AGENTS.md`**, respect the instruction hierarchy: put repository-wide
-guidance at the root and subtree-specific rules in the narrowest applicable
-nested `AGENTS.md`. Include a project overview, known layout, stack and
-architecture decisions, verified commands, conventions, dependency policy,
-implementation guardrails, validation expectations, secrets rules, a definition
-of done, and pointers to deeper docs. Do not duplicate the full specification,
-invent commands you have not verified, or create an `AGENTS.override.md` unless
-the user explicitly wants a temporary override.
-
-For **`docs/project-spec.md`**, include a working title, problem statement,
-goals, users, workflows, MVP scope, non-goals, architecture and stack rationale,
-data and integration assumptions, UX or API expectations, operational and
-security considerations, the decision register, risks, acceptance criteria, and
-open questions. Separate facts, confirmed decisions, assumptions,
-recommendations, and `TBD`s; use headings, short prose, tables, or bullets to
-fit the information's shape rather than burying key constraints in narrative.
-
-## Validate before reporting
-
-Reconcile the artifacts against the register and call out any material default
-that remains unconfirmed. Then run lightweight checks proportionate to what you
-touched, using whatever the environment provides:
-
-- Review Markdown headings, links, and internal references; remove duplicated or
-  contradictory guidance.
-- Parse any YAML, JSON, or TOML you created or edited.
-- Verify that every documented command exists in the environment or manifests,
-  or clearly mark it as proposed.
-- Confirm no secrets, credentials, production identifiers, or tokens were
-  included.
-
-If a validator is unavailable — as is common on Claude.ai — state what you
-checked manually and mark the rest "unverified" rather than failing silently or
-claiming a check you did not run. Do not run a full application test suite when
-only planning documents changed.
-
-## Completion report
-
-Close with a concise report in chat — not a file, and never a wall of pasted
-file contents:
-
-1. Artifacts created or updated, with paths (and intended repository paths when
-   there is no repository yet).
-2. Key confirmed decisions and recommended defaults (IDs and one-line
-   summaries).
-3. Validation that passed, failed, or could not run, including anything
-   unverified.
-4. Remaining `TBD`s and assumptions, each with what unblocks it.
-5. A clean handoff: the recommended next steps, such as repository scaffolding,
-   an implementation plan, or any deferred code-writing request.
-
-## Quality bar
-
-Before finishing, ensure:
-
-- Evidence, user decisions, recommendations, assumptions, and `TBD`s are
-  distinguishable throughout.
-- The recommended stack is coherent end to end.
-- Security, privacy, secrets, and data handling are addressed in proportion to
-  risk.
-- Testing, local development, deployment, and operations each have a plausible
-  path.
-- A future agent can tell what to do next without hidden conversation context.
-- Layered `AGENTS.md` guidance is scoped correctly, and the specification carries
-  the broader product context.
-- No unresolved decision is presented as settled, and no generic startup
-  template is substituted for the user's actual evidence.
+If the user asks to start coding mid-session, don't refuse and don't comply within this skill: finish by rendering the spec with all remaining Open and Assumed items clearly flagged, then hand off so implementation begins from a documented foundation.

@@ -1,1 +1,4 @@
-See [AGENTS.md](AGENTS.md).
+- Always use conventional commit messages.
+- When working on a specific Github issue, use closing keywords.
+- Keep the readme updated when a skill is added or significantly changed.
+- When creating or changing a skill, ensure only the necessary files ship in the release package. Update it if a skill needs to distribute a new file/dir, and keep anything not meant for distribution out of the allowlist.

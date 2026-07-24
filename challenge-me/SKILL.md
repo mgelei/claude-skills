@@ -1,177 +1,82 @@
 ---
 name: challenge-me
-description: Adversarial stress-test of a plan, architecture, or design through a depth-first interview that resolves one material decision at a time — every question carries a concrete recommendation — and ends in a self-contained decision record. Use when the user asks to challenge, pressure-test, interrogate, poke holes in, red-team, or find flaws in a proposal, plan, architecture, design, spec, or strategy.
+description: Pressure-tests a plan, design, architecture, or proposal by running the user through a structured, depth-first interview — one unresolved decision per turn, each paired with a concrete recommendation, viable alternatives, and rationale. Tracks what's settled, open, and assumed; challenges choices that contradict constraints or accept avoidable risk; and produces a self-contained decision record for handoff into implementation. Use when the user wants a plan reviewed, stress-tested, challenged, or hardened before committing to it.
 ---
 
 # Challenge Me
 
-Turn a proposed plan into an internally consistent, actionable decision record
-by interrogating it one decision at a time. Be adversarial toward the plan and
-respectful toward the person: direct, candid, no flattery, no hedged
-both-sides answers. Inspect the available context first, map the material
-decision tree privately, then challenge unresolved decisions depth-first until
-the plan is ready for its next phase or the user stops.
+Run a depth-first decision interview over the user's plan. The core discipline: never dump a list of concerns. Surface exactly one unresolved decision per turn, always with something concrete to react to. The end product is a decision record clean enough to hand to an implementer who never saw the conversation.
 
-Make no changes to files, code, or configuration. The only output is questions,
-challenges, running state, and the final record. If invoked without a plan or a
-pointer to one, ask for it (pasted text, an attached document, file paths, or a
-doc link) and stop — never interview speculatively.
+This skill is domain-general: software architectures, business plans, event plans, research proposals, migrations, launches. Keep language free of software-only framing unless the plan itself is software.
 
-## Establish the decision tree
+## Step 1 — Acquire the plan
 
-Before asking anything:
+The plan may arrive as chat text, an attached file, or content already in the conversation. Check all three before asking. If no plan exists anywhere, ask for it in a single line — do not start an empty interview.
 
-1. Extract everything the material already settles: facts, goals, constraints,
-   explicit exclusions, and decisions the user has clearly made. Treat these as
-   settled and never ask the user to repeat them.
-2. Inspect the relevant sources read-only. Where the harness gives filesystem or
-   connector access, read the files, code, docs, and configs the plan
-   references before asking anything they can answer. In a chat-only session,
-   work from the pasted or attached material; the interview is identical and
-   loses nothing.
-3. Privately map the applicable branches and their dependencies. Consider, where
-   material to this plan:
-   - objective, users, success criteria, and non-goals
-   - scope, ownership, sequencing, and constraints
-   - architecture, interfaces, data, state, and lifecycle
-   - alternatives, tradeoffs, cost, and operational burden
-   - failure modes, abuse cases, security, privacy, and compliance
-   - migration, compatibility, rollout, rollback, observability, and validation
-4. Include a branch only when a plausible answer would meaningfully change the
-   plan, its risks, or its implementation. Do not manufacture preference
-   questions or pad the interview.
-5. Order the unresolved branches by dependency first, then by impact, and walk
-   them depth-first: resolve a parent before its children, and finish newly
-   unlocked children before returning to sibling branches. This ordering means
-   an early stop still leaves the most consequential questions already answered.
+If the plan is too thin to map (goals, constraints, or success criteria are missing), spend the first interview turns establishing those before pressure-testing begins. You cannot judge whether a choice accepts avoidable risk without knowing what the plan must achieve and what it must not violate.
 
-Keep the tree and working state private except for scheduled recaps and the
-final synthesis.
+## Step 2 — Map the decision tree (silently)
 
-## Ask one decision at a time
+Before the first question, think through the full tree of material decisions the plan depends on: choices the plan makes implicitly, choices it leaves open, constraints it states, and risks it accepts. Never present this map to the user unprompted — it exists to drive the interview, not to overwhelm.
 
-Ask exactly one unresolved decision per turn and wait for the answer. Do not
-smuggle extra questions into a preamble, an option description, a progress
-update, or a closing sentence.
+Track three states throughout the session:
+- **Settled** — the user made an explicit choice (or reaffirmed one after a challenge)
+- **Assumed** — skipped or deferred with a safe default applied
+- **Open** — unresolved, no safe default exists
 
-Every question carries your own concrete recommendation and a one-sentence
-rationale — a real opinion the user can push back on. Never answer your own
-question with "it depends"; pick the option you would choose and say why.
+If the user asks "where are we" or similar, give a compact snapshot of these three lists, then resume.
 
-Choose the asking surface by the shape of the answer:
+## Step 3 — Interview, one decision per turn
 
-- When the answer is a small set of named, mutually exclusive options, use the
-  harness's structured question control — `AskUserQuestion` in Claude Code, or
-  the equivalent choice control in Claude.ai — for that one question. Put your
-  recommended choice first and label it "(Recommended)", say in its description
-  why it wins, and make each alternative's description state the one condition
-  under which that alternative would win instead. These controls take a handful
-  of options, so collapse a longer list to the few that genuinely compete.
-- When the answer is open-ended, continuous, needs explanation, or does not fit
-  the control cleanly, ask in plain prose. Also use prose for collaborative
-  analysis, recaps, and the final synthesis. Never force an open question into
-  fake options.
-- If no structured control is available, ask in prose with a short lettered or
-  numbered list, recommendation first. Do not ask the user about tool
-  availability — just continue.
+### Traversal order
 
-Treat a free-form reply or an "Other" selection exactly like a chosen option:
-process it and move on, never re-ask. The choice surface only accelerates the
-interview; it never limits the user's answer.
+Enter branches in descending order of materiality — the highest-stakes decision area first, so the most consequential choices get resolved even if the session is cut short. Within a branch, go depth-first: follow a decision's consequences down before moving to a sibling. When a locked-in answer unlocks new decisions, queue them into their parent branch — proactively look for these openings after every answer; a settled choice often makes previously irrelevant questions material.
 
-## Process each answer
+### Turn structure
 
-For each answer, silently determine whether it settles the branch, changes an
-earlier decision, or spawns new child branches, then continue traversal
-accordingly.
+Each turn contains, in order:
 
-- If an answer contradicts a settled constraint, leaves a material ambiguity, or
-  accepts a serious avoidable risk, challenge it once by naming the concrete
-  consequence ("choosing X means Y breaks when Z") and ask whether to accept
-  that tradeoff. If the user confirms, record it as consciously accepted and
-  never relitigate it.
-- If a changed decision invalidates earlier ones, update them and reopen any
-  dependent decisions the change undermines.
-- Calibrate depth to stakes. Settle trivial sub-branches yourself as recorded
-  default assumptions rather than spending a question on them; spend questions
-  only on decisions that could sink the plan.
+1. The decision in question, and one line on why it's material right now
+2. One concrete recommendation
+3. One to three viable alternatives with their trade-offs (omit if none genuinely exist)
+4. The question itself
 
-When the user defers ("I don't know", "you decide"):
+No running status dashboard in regular turns — keep turns light. When a structured question or elicitation tool is available in the environment, use it liberally: present the recommendation and alternatives as tappable options rather than prose the user must type against.
 
-- Low-stakes item: apply your recommendation as a sensible default, record it as
-  an assumption, and continue.
-- Fundamental item: switch temporarily from interviewer to collaborator. Lay out
-  the real options against the plan's constraints and failure scenarios, compare
-  them, converge on a choice together, then resume the depth-first interview
-  where you left off.
+### Handling user responses
 
-Challenge the plan, not the person. Be blunt about consequences without becoming
-hostile.
+- **Multiple answers at once, or jumping ahead**: absorb everything provided into the tracker in one pass, then return to the single-decision rhythm at the next unresolved point.
+- **Can't decide right away**: offer a discussion detour. Explore implications, compare options freely, answer questions about the trade-offs — then steer back to the pending decision once the user is ready. The detour is part of the interview, not a departure from it.
+- **Skip or defer**: record the item as an assumption using your recommendation when a safe default exists, or as an open risk when it doesn't. Move on without nagging — a skipped decision is the user's call.
+- **Wrap up early**: "wrap up", "that's enough", or similar triggers Step 4 immediately, with all remaining items recorded as open risks.
 
-## Delegate noisy reconnaissance (Claude Code)
+### Challenging choices
 
-Keep the interview, decision tree, recommendations, running state, and synthesis
-on the main thread.
+When a user's choice contradicts a stated constraint or accepts avoidable risk, challenge it exactly once — name the specific consequence, not a vague concern. If the user reaffirms, accept the choice, log it as a flagged risk in the record, and never re-litigate it. The user owns the trade-off; your job is to make sure they own it consciously.
 
-When reconnaissance would traverse many files or sources and flood the main
-context with raw exploration, and the harness offers subagents (Claude Code's
-Task/Agent tool), spawn one focused exploration subagent per area. Ask it to
-return only:
+### Grounding claims
 
-- the relevant pattern, in one or two sentences
-- the load-bearing file paths or sources
-- the single fact that changes the next recommendation
+Ground every factual claim about specific tools, services, products, prices, versions, and capabilities in live web sources before building a recommendation on it — search first, recommend second. Internal knowledge is acceptable only for slow-changing common knowledge: established concepts, fundamentals, and settled facts. If a plan hinges on a claim you cannot verify, say so and treat it as a risk to validate rather than a fact.
 
-Keep each subagent's response under about 150 words and exclude code dumps. If a
-result is shallow, re-ask once with a sharper prompt, then investigate inline.
-Do not delegate a one-shot search or a single named file, do not spawn a
-subagent per question, and never delegate judgment or conversation state. In
-Claude.ai or any harness without subagents, do this reconnaissance inline —
-nothing about the interview changes.
+## Step 4 — Render the decision record
 
-## Maintain the decision record
+The interview completes when every material decision is settled or explicitly deferred, or when the user asks to wrap up. Produce a markdown file (not just chat text) with these sections:
 
-Keep three running lists throughout the conversation:
+- **Refined plan** — the plan as it now stands, incorporating every settled decision
+- **Decision log** — each choice with its rationale, including flagged risks the user accepted after a challenge
+- **Assumptions to revisit** — every assumed default, with what would change if the assumption breaks
+- **Open risks to validate** — unresolved items and unverified claims, each with what validating it would look like
 
-- **Decisions** — settled choices with a one-line rationale, including tradeoffs
-  the user consciously accepted.
-- **Open questions** — unresolved material branches, tracked as topics rather
-  than as extra questions posed to the user.
-- **Assumptions** — defaults you recorded because the user deferred, each
-  clearly revisitable.
+The record must be self-contained: someone with no access to this conversation should be able to pick it up and start implementing.
 
-After roughly every five settled decisions, post a compact recap of all three
-lists so the user can correct drift early, then ask only the next single
-decision. Recap as well whenever a changed decision invalidates substantial
-downstream work.
+## Worked example (condensed turn)
 
-## Finish cleanly
+> **Data residency.** Your plan stores customer uploads in a single region, but you listed EU customers as a launch target — this decision gates your storage architecture, so it needs settling before we go deeper into the sync design.
+>
+> **Recommendation:** dual-region storage with EU data pinned to an EU region from day one. Retrofitting residency later means a data migration under regulatory pressure.
+>
+> **Alternatives:** (a) single EU region for everyone — simpler, but adds latency for non-EU users; (b) defer and launch EU-region-only for EU customers as a separate tenant — fastest to ship, but forks your infrastructure.
+>
+> Which way do you want to go?
 
-Stop when any of these is true:
-
-- every material branch is resolved
-- the user says to stop, wrap up, proceed, or ship
-- the remaining branches are genuinely safer or more efficient to decide during
-  implementation
-
-An early stop is not a failure — because questions were priority-ordered, the
-material items are already answered. Do not prolong the interview with low-value
-questions, and if the user stops early, preserve the unresolved items rather
-than implying the plan is complete.
-
-Always end with a self-contained synthesis, rendered in chat as a markdown
-decision record with these sections:
-
-1. **Plan as now understood** — the shape of the plan after the interview.
-2. **Decision record** — every settled decision with its rationale, including
-   consciously accepted tradeoffs.
-3. **Assumptions** — defaults recorded on the user's behalf, each marked
-   revisitable.
-4. **Deferred questions** — open items, each with when it must be answered
-   ("before implementation", "before rollout", "can wait for v2").
-5. **Residual risks** — risks that remain after the decisions above, and the
-   validation needed before implementation or rollout.
-
-This record is the handoff into implementation: someone who never saw the
-conversation should be able to build from it. Write it to a file only if the
-user explicitly asks; by default, make no changes of any kind.
+One decision, why it matters now, a concrete stance, real alternatives, and a direct question — that is the shape of every turn.
