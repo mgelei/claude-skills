@@ -56,6 +56,7 @@ Example of a list mid-iteration:
 
 - Order the initial items in strictly descending order of importance, so material decisions surface first even if the user stops reading partway.
 - Item numbers are permanent. Never renumber, never reuse a number. Deleted items keep their slot as `~~(removed)~~` so all later numbers stay valid references.
+- A `~~(removed)~~` item is dropped, not defaulted: that dimension is left unconstrained in the final prompt, and its former recommendation does **not** silently apply. Deleting is how the user opts a concern out entirely, distinct from accepting its default.
 - New items are always appended at the end with fresh numbers, regardless of their importance — number stability outranks ordering for additions.
 - Re-render the **complete** list every iteration. The list is the single source of truth for session state; partial re-renders cause numbering and content drift over long conversations.
 - "Changed" means the recommendation text differs from the previous render — whether from a user override or a revision this skill made itself. Bold lasts exactly one iteration: remove it the next time the item renders unchanged.
@@ -78,8 +79,10 @@ Example of a list mid-iteration:
 ## Step 4 — Render the final prompt
 
 - The entire response is the prompt inside a single code block. Nothing before it, nothing after it: no preamble, no explanation, no usage notes. The user asked for a deliverable, not a walkthrough.
+- Choose the outer fence so it can't be terminated from inside: it must be a backtick run longer than any run appearing within the prompt. If the prompt contains nested triple-backtick code examples, wrap the whole thing in four backticks (or more); count the longest inner run and add at least one.
 - Structure the prompt as sensible sections (markdown headers or XML tags grouping distinct concerns — role/context, task, output format, constraints, examples, edge cases as applicable). Never a single wall of text.
 - Weave accepted defaults and user overrides into the prose naturally, as if written in one voice from scratch.
+- Before sending, scan the rendered prompt for leftover scaffolding: bracketed fields, `TBD`, "insert here", or any unresolved placeholder, and confirm every accepted override actually made it into the text. The deliverable ships finished — nothing for the user to fill in that the loop was supposed to settle.
 
 ## Step 5 — After rendering
 
