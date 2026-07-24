@@ -1,0 +1,22 @@
+{
+  "name": "gelei-dev",
+  "owner": { "name": "Mate Gelei-Szego" },
+  "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement, and project bootstrapping.",
+  "plugins": [
+    {
+      "name": "challenge-me",
+      "source": "./plugins/challenge-me",
+      "description": "Pressure-tests a plan through a depth-first decision interview and produces a handoff-ready decision record."
+    },
+    {
+      "name": "prompt-architect",
+      "source": "./plugins/prompt-architect",
+      "description": "Refines a rough prompt idea into a polished, Claude-optimized prompt through a structured clarification loop."
+    },
+    {
+      "name": "bootstrap-project",
+      "source": "./plugins/bootstrap-project",
+      "description": "Turns a rough idea into durable project foundations via a decision interview, register, and high-level spec."
+    }
+  ]
+}

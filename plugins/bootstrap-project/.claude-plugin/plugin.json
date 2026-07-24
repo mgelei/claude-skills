@@ -1,0 +1,9 @@
+{
+  "name": "bootstrap-project",
+  "description": "Turns a rough idea into durable project foundations via a decision interview, register, and high-level spec.",
+  "version": "1.0.0",
+  "author": { "name": "Mate Gelei-Szego" },
+  "homepage": "https://mate.gelei.dev",
+  "repository": "https://github.com/mgelei/claude-skills",
+  "license": "MIT"
+}
