@@ -79,6 +79,12 @@ The spec (`PROJECT_SPEC.md`, or a downloadable file in plain chat) uses these se
 
 Length scales with project complexity — a prototype spec can be a page; a production system warrants real depth in each section. Remaining Assumed entries are surfaced in the relevant sections, clearly marked as assumptions.
 
+Before finalizing either deliverable, run three checks over what you're about to write out:
+
+- **Secrets scan:** verify no secrets, credentials, tokens, connection strings, or production identifiers picked up from the inspected repo have leaked into `DECISIONS.md` or `PROJECT_SPEC.md`. The foundation documents describe decisions, never carry live secrets.
+- **Command existence:** every command the spec documents (build, test, run, deploy) must actually exist in the repo — confirm it against the manifests or scripts you inspected, or mark it explicitly as proposed. Never ship a command you haven't verified as if it were real.
+- **Structured-file validity:** if you wrote any YAML, JSON, or TOML — frontmatter, config stubs, sample manifests — parse it before finalizing to catch syntax errors you introduced.
+
 ## Hard boundary — no implementation
 
 Stop before code, every time. No scaffolding, no file generation beyond the register and spec, no "starter" implementations, no partial builds — the entire value of this skill is laying groundwork without freezing decisions prematurely, and generated code freezes decisions.
