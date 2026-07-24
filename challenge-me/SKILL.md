@@ -13,11 +13,15 @@ This skill is domain-general: software architectures, business plans, event plan
 
 The plan may arrive as chat text, an attached file, or content already in the conversation. Check all three before asking. If no plan exists anywhere, ask for it in a single line — do not start an empty interview.
 
+Before asking the user anything, do a read-only pass over whatever context is already available — relevant files, code, attachments, and connected sources — and mine it for answers the interview would otherwise waste turns on. A question the context already answers should never be asked; fold what you find into the decision tree as settled facts or assumptions instead.
+
 If the plan is too thin to map (goals, constraints, or success criteria are missing), spend the first interview turns establishing those before pressure-testing begins. You cannot judge whether a choice accepts avoidable risk without knowing what the plan must achieve and what it must not violate.
 
 ## Step 2 — Map the decision tree (silently)
 
 Before the first question, think through the full tree of material decisions the plan depends on: choices the plan makes implicitly, choices it leaves open, constraints it states, and risks it accepts. Never present this map to the user unprompted — it exists to drive the interview, not to overwhelm.
+
+As you map, deliberately sweep the categories plans most often under-probe — failure modes, abuse cases, security, privacy, compliance, migration and rollback, observability — and add any that apply to the tree. Skip the ones a given plan genuinely doesn't touch, but skip them consciously rather than by omission.
 
 Track three states throughout the session:
 - **Settled** — the user made an explicit choice (or reaffirmed one after a challenge)
@@ -31,6 +35,8 @@ If the user asks "where are we" or similar, give a compact snapshot of these thr
 ### Traversal order
 
 Enter branches in descending order of materiality — the highest-stakes decision area first, so the most consequential choices get resolved even if the session is cut short. Within a branch, go depth-first: follow a decision's consequences down before moving to a sibling. When a locked-in answer unlocks new decisions, queue them into their parent branch — proactively look for these openings after every answer; a settled choice often makes previously irrelevant questions material.
+
+Watch the reverse case too: when an answer changes or a user revises an earlier choice, check whether it invalidates decisions already settled downstream. Reopen every settled decision that rested on the old answer, flag that they were reopened and why, and re-resolve them before moving on — a decision built on a premise that no longer holds is no longer settled.
 
 ### Turn structure
 
