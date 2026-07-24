@@ -21,7 +21,7 @@ If the plan is too thin to map (goals, constraints, or success criteria are miss
 
 Before the first question, think through the full tree of material decisions the plan depends on: choices the plan makes implicitly, choices it leaves open, constraints it states, and risks it accepts. Never present this map to the user unprompted — it exists to drive the interview, not to overwhelm.
 
-As you map, deliberately sweep the categories plans most often under-probe — failure modes, abuse cases, security, privacy, compliance, migration and rollback, observability — and add any that apply to the tree. Skip the ones a given plan genuinely doesn't touch, but skip them consciously rather than by omission.
+As you map, deliberately sweep the categories plans most often under-probe — failure modes, security, privacy, compliance, migration and rollback, observability — and add any that apply to the tree. Skip the ones a given plan genuinely doesn't touch, but skip them consciously rather than by omission.
 
 Track three states throughout the session:
 - **Settled** — the user made an explicit choice (or reaffirmed one after a challenge)
