@@ -3,7 +3,7 @@
 **Repo:** `mgelei/claude-skills` · **Date:** 2026-07-24
 **Goal:** Publish the three skills (`challenge-me`, `prompt-architect`, `bootstrap-project`) so any Claude user can install them — primary target **claude.ai**, secondary **Claude Code**.
 
-This record is self-contained: an implementer who never saw the conversation can execute from it. Nothing below has been built yet — this session was **record-only** by decision.
+This record is self-contained: an implementer who never saw the conversation can execute from it. Implementation is tracked in #22 and its phase issues — Phase 1 (layout) and Phase 2 (manifests, LICENSE) have landed; CI, docs, and the merge to `main` have not.
 
 ---
 
@@ -11,7 +11,7 @@ This record is self-contained: an implementer who never saw the conversation can
 
 Turn this repository into a **self-hosted Claude plugin marketplace**. One GitHub repo with `.claude-plugin/marketplace.json` serves *both* surfaces: on claude.ai via **Settings → Customize → plugins → Add marketplace → sync from GitHub (`mgelei/claude-skills`)**, and in Claude Code via `/plugin marketplace add mgelei/claude-skills`. There is no separate "claude.ai store submission" — the marketplace *is* the store for both.
 
-The three skills are wrapped as **three independent plugins** under **one marketplace named `gelei-dev`**, laid out in Anthropic's canonical plugin structure. Distribution shifts entirely to the marketplace; the current private-zip release path is retired. After self-hosting is live, separately **submit to Anthropic's official directory** (`anthropics/claude-plugins-official`) for broader discoverability (discretionary — not guaranteed).
+The three skills are wrapped as **three independent plugins** under **one marketplace named `mgelei`**, laid out in Anthropic's canonical plugin structure. Distribution shifts entirely to the marketplace; the current private-zip release path is retired. After self-hosting is live, separately **submit to Anthropic's official directory** (`anthropics/claude-plugins-official`) for broader discoverability (discretionary — not guaranteed).
 
 ### Target end-state layout
 
@@ -47,8 +47,8 @@ The SKILL.md files themselves are unchanged (their existing `name` + `descriptio
 
 ```json
 {
-  "name": "gelei-dev",
-  "owner": { "name": "Mate Gelei" },
+  "name": "mgelei",
+  "owner": { "name": "Mate Gelei-Szego" },
   "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement, and project bootstrapping.",
   "plugins": [
     {
@@ -79,7 +79,7 @@ The SKILL.md files themselves are unchanged (their existing `name` + `descriptio
   "name": "challenge-me",
   "description": "Pressure-tests a plan through a depth-first decision interview and produces a handoff-ready decision record.",
   "version": "1.0.0",
-  "author": { "name": "Mate Gelei" },
+  "author": { "name": "Mate Gelei-Szego" },
   "homepage": "https://mate.gelei.dev",
   "repository": "https://github.com/mgelei/claude-skills",
   "license": "MIT"
@@ -96,9 +96,9 @@ Run on push and PR: install the Claude Code CLI (`npm i -g @anthropic-ai/claude-
 
 Rewrite with copy-paste install instructions for both surfaces:
 - **claude.ai:** Settings → Customize → plugins → Add marketplace → `mgelei/claude-skills`, then install each plugin.
-- **Claude Code:** `/plugin marketplace add mgelei/claude-skills` then `/plugin install challenge-me@gelei-dev` (and the other two).
+- **Claude Code:** `/plugin marketplace add mgelei/claude-skills` then `/plugin install challenge-me@mgelei` (and the other two).
 
-Note the distinction clearly: users **add** the marketplace by repo path (`mgelei/claude-skills`) but **install** by `@gelei-dev` (the marketplace `name`).
+Note the distinction clearly: users **add** the marketplace by repo path (`mgelei/claude-skills`) but **install** by `@mgelei` (the marketplace `name`).
 
 ### `CLAUDE.md`
 
@@ -115,7 +115,7 @@ Update the two release-package instructions — the zip allowlist no longer exis
 | 3 | Repo layout | **Canonical `plugins/<name>/{.claude-plugin/plugin.json, skills/<name>/SKILL.md}`** | Matches Anthropic's required structure (plugin.json required, components at plugin root); clean per-plugin sources and versioning. Alternative "root + strict:false" is off-spec for official submission and re-versions all plugins on any commit. |
 | 4 | Versioning | **Explicit semver in each `plugin.json`, start `1.0.0`, bump deliberately** | Updates fire only on intentional bumps; official-directory expectation; fits conventional-commits discipline. SHA-based auto-versioning causes update churn (any repo commit re-versions everything). |
 | 5 | Release CI | **Retire the zip workflow; add validation CI** (`claude plugin validate .` on push/PR) | Single canonical channel avoids a confusing second source of truth; validation guards against a malformed manifest breaking installs for everyone. |
-| 6 | Marketplace name | **`gelei-dev`** | Kebab-case, tied to the user's domain `gelei.dev`, clearly not official, safe against the reserved list. |
+| 6 | Marketplace name | **`mgelei`** (was `gelei-dev` when this record was first written) | Matches the GitHub owner, so the add path `mgelei/claude-skills` and the install suffix `@mgelei` read as one identity; clearly not official, safe against the reserved list. |
 | 6b | Plugin slugs | **`challenge-me`, `prompt-architect`, `bootstrap-project`** (= skill names) | Already meaningful and kebab-case; become permanent install identifiers, so no reason to rename. |
 | 7 | License | **MIT** (repo `LICENSE` + `license` in each `plugin.json`) | A marketplace inherently redistributes files; MIT permits that with lowest friction and a standard SPDX id. |
 | 8 | Contact metadata | **Name + homepage, no email** | Reachable via `https://mate.gelei.dev` and repo issues without publishing `hello@mategelei.com` into widely-cloned JSON. |
@@ -133,8 +133,8 @@ Delete the existing GitHub Releases **`v1.0.0`** and **`v1.1.0`**, their attache
 |------------|--------------|
 | Plugin skills auto-load from the plugin's `skills/` directory with no explicit `skills` field | If a skill fails to load after install, add an explicit `skills` path to that plugin's entry/manifest. Catch this in local `/plugin install` testing before publishing. |
 | Each skill ships as a single `SKILL.md` with no companion `references/`, `scripts/`, or `assets/` | If a skill later needs bundled files, place them inside `plugins/<name>/` — the whole plugin dir is copied to users' caches, so they ship automatically (no allowlist needed anymore). |
-| Users add the marketplace by repo path `mgelei/claude-skills` and install by `@gelei-dev` | If the repo is renamed/moved, the add path changes; the `@gelei-dev` install identity stays stable as long as the `name` in `marketplace.json` is unchanged. |
-| Marketplace `name` `gelei-dev` is not on Anthropic's reserved list and won't become reserved | If it's ever reserved, Claude Code stops loading it as "untrusted source"; re-add under a different name. (Current reserved list does not include it.) |
+| Users add the marketplace by repo path `mgelei/claude-skills` and install by `@mgelei` | If the repo is renamed/moved, the add path changes; the `@mgelei` install identity stays stable as long as the `name` in `marketplace.json` is unchanged. |
+| Marketplace `name` `mgelei` is not on Anthropic's reserved list and won't become reserved | If it's ever reserved, Claude Code stops loading it as "untrusted source"; re-add under a different name. (Current reserved list does not include it.) |
 
 ---
 
