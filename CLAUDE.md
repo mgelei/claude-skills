@@ -1,4 +1,6 @@
 - Always use conventional commit messages.
 - When working on a specific Github issue, use closing keywords.
 - Keep the readme updated when a skill is added or significantly changed.
-- When creating or changing a skill, ensure only the necessary files ship in the release package. Update it if a skill needs to distribute a new file/dir, and keep anything not meant for distribution out of the allowlist.
+- Keep non-distributable files out of `plugins/<name>/` — the whole plugin directory is copied into users' plugin caches on install.
+- Bump `version` in `plugins/<name>/.claude-plugin/plugin.json` when a skill changes meaningfully; users only receive updates on a deliberate semver bump.
+- Pin every GitHub Actions `uses:` to a full commit SHA with the version as a trailing comment (`uses: actions/checkout@<sha> # v7.0.1`), resolved from the action's latest stable release. This covers marketplace actions only — npm/CLI installs inside a step are not pinned.
