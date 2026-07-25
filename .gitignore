@@ -1,3 +1,6 @@
+# Per-user overrides of .claude/settings.json — never shared.
+.claude/settings.local.json
+
 .claude/*.swp
 .claude/.*.swp
 .claude/worktrees/
