@@ -1,5 +1,5 @@
 ---
-name: bootstrap-project 
+name: bootstrap-project
 description: Turns a rough software or product idea into durable, reviewable project foundations before any code is written, through an iterative decision interview backed by research and a running decision register, culminating in a high-level project spec.
 ---
 
