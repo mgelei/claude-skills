@@ -1,5 +1,5 @@
 {
-  "name": "gelei-dev",
+  "name": "mgelei",
   "owner": { "name": "Mate Gelei-Szego" },
   "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement, and project bootstrapping.",
   "plugins": [
