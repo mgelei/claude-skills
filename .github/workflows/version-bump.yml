@@ -1,0 +1,97 @@
+name: Version bump
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The merge base is needed to diff the PR against main.
+          fetch-depth: 0
+
+      - name: Require a version bump for each changed plugin
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # Diff against the merge base, so commits another PR landed on the
+          # base branch are never attributed to this one. --no-renames keeps
+          # the old path in the list, so renaming a plugin directory while
+          # editing it still demands a bump.
+          changed=$(git diff --no-renames --name-only "$BASE_SHA...$HEAD_SHA" -- plugins/ | cut -d/ -f2 | sort -u)
+
+          if [ -z "$changed" ]; then
+            echo "No plugin files changed — nothing to check."
+            exit 0
+          fi
+
+          exists_at() {
+            git cat-file -e "$1:$2" 2>/dev/null
+          }
+
+          # Only called once the manifest is known to exist at the ref, so a
+          # failure here is a malformed manifest or a missing `version` key —
+          # both worth failing on rather than treating as an absent plugin.
+          # jq's own diagnostics go to stderr and survive the substitution.
+          version_at() {
+            git show "$1:$2" | jq -er '.version'
+          }
+
+          fail=0
+          while IFS= read -r name; do
+            manifest="plugins/$name/.claude-plugin/plugin.json"
+
+            head_exists=false
+            base_exists=false
+            if exists_at "$HEAD_SHA" "$manifest"; then head_exists=true; fi
+            # Compared against the base branch tip rather than the merge base,
+            # so a bump another PR already took does not count as a bump here.
+            if exists_at "$BASE_SHA" "$manifest"; then base_exists=true; fi
+
+            if ! $head_exists && ! $base_exists; then
+              continue  # not a plugin directory
+            fi
+            if ! $head_exists; then
+              echo "$name: plugin removed — skipping."
+              continue
+            fi
+            if ! $base_exists; then
+              echo "$name: new plugin — nothing to bump from."
+              continue
+            fi
+
+            if ! head_version=$(version_at "$HEAD_SHA" "$manifest") ||
+               ! base_version=$(version_at "$BASE_SHA" "$manifest"); then
+              echo "::error file=$manifest::Could not read a \`version\` string from $manifest."
+              fail=1
+              continue
+            fi
+
+            if [ "$head_version" = "$base_version" ]; then
+              echo "::error file=$manifest::$name changed but version is still $head_version — bump it (see CLAUDE.md)."
+              fail=1
+              continue
+            fi
+
+            # `sort -V` is not strict semver for prerelease identifiers; every
+            # plugin here uses plain x.y.z, where it is exact.
+            lower=$(printf '%s\n%s\n' "$base_version" "$head_version" | sort -V | head -n1)
+            if [ "$lower" != "$base_version" ]; then
+              echo "::error file=$manifest::$name is at $head_version but the base branch is already at $base_version — rebase and bump above $base_version."
+              fail=1
+              continue
+            fi
+
+            echo "$name: $base_version -> $head_version"
+          done <<< "$changed"
+
+          exit "$fail"
