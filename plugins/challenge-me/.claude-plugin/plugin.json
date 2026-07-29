@@ -1,7 +1,7 @@
 {
   "name": "challenge-me",
   "description": "Pressure-tests a plan through a depth-first decision interview and produces a handoff-ready decision record.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": { "name": "Mate Gelei-Szego" },
   "homepage": "https://mate.gelei.dev",
   "repository": "https://github.com/mgelei/claude-skills",
