@@ -73,7 +73,9 @@ The interview completes when every material decision is settled or explicitly de
 - **Assumptions to revisit** — every assumed default, with what would change if the assumption breaks
 - **Open risks to validate** — unresolved items and unverified claims, each with what validating it would look like
 
-The record must be self-contained: someone with no access to this conversation should be able to pick it up and start implementing.
+The record must be self-contained: someone with no access to this conversation should be able to pick it up and start implementing. Self-contained means complete on decisions, not long — keep each entry tight and skip narrative recap of the interview.
+
+Rendering the record ends the skill. Do not start implementing the refined plan or resolving open risks yourself — those belong to whoever picks up the record.
 
 ## Worked example (condensed turn)
 

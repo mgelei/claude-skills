@@ -77,13 +77,12 @@ The spec (`PROJECT_SPEC.md`, or a downloadable file in plain chat) uses these se
 9. Acceptance criteria
 10. Open questions carried forward
 
-Length scales with project complexity — a prototype spec can be a page; a production system warrants real depth in each section. Remaining Assumed entries are surfaced in the relevant sections, clearly marked as assumptions.
+Length scales with project complexity — a prototype spec can be a page; a production system warrants real depth in each section. Depth means resolved decisions and their rationale, not prose volume: write the shortest version that fully captures each decision. Remaining Assumed entries are surfaced in the relevant sections, clearly marked as assumptions.
 
-Before finalizing either deliverable, run three checks over what you're about to write out:
+Two constraints on what ships in either deliverable:
 
 - **Secrets scan:** verify no secrets, credentials, tokens, connection strings, or production identifiers picked up from the inspected repo have leaked into `DECISIONS.md` or `PROJECT_SPEC.md`. The foundation documents describe decisions, never carry live secrets.
 - **Command existence:** every command the spec documents (build, test, run, deploy) must actually exist in the repo — confirm it against the manifests or scripts you inspected, or mark it explicitly as proposed. Never ship a command you haven't verified as if it were real.
-- **Structured-file validity:** if you wrote any YAML, JSON, or TOML — frontmatter, config stubs, sample manifests — parse it before finalizing to catch syntax errors you introduced.
 
 ## Hard boundary — no implementation
 
