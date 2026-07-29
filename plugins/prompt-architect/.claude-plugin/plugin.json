@@ -1,7 +1,7 @@
 {
   "name": "prompt-architect",
   "description": "Refines a rough prompt idea into a polished, Claude-optimized prompt through a structured clarification loop.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": { "name": "Mate Gelei-Szego" },
   "homepage": "https://mate.gelei.dev",
   "repository": "https://github.com/mgelei/claude-skills",

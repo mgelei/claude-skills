@@ -34,6 +34,7 @@ Surface every material decision as its own item — importance ordering (Step 2)
 - Use-time input mechanism (see "Use-time input" below)
 - Whether concrete examples would improve reliability, and what they should demonstrate
 - Hard constraints — things the prompt must never allow
+- Obsolete scaffolding present in the user's idea — verification steps, progress-update demands, anti-laziness lines, ALL-CAPS tool mandates — surfaced as an item whose recommended default is removal, so the user consciously accepts the strip
 - Surface limitations — no API parameters (effort, thinking budgets, temperature), no template variables, no system-role syntax in Claude.ai surfaces
 
 Merge only trivial near-duplicates into one item; when in doubt, keep items separate.
@@ -89,18 +90,21 @@ Example of a list mid-iteration:
 - Small tweak requests skip the list entirely: apply the change and re-render the full updated prompt, again as a code block with nothing else.
 - Resume the list workflow only if a requested change reopens a genuinely material open question.
 
-## Prompt-writing guidance (Claude, tuned for Opus 4.8)
+## Prompt-writing guidance (Claude, tuned for Opus 5)
 
 Apply these when composing the final prompt:
 
-- **State scope explicitly.** Current Claude models follow instructions literally and do not silently generalize from one item to another — write "apply this format to every section, not only the first," not just "use this format."
+- **Never add verification scaffolding.** Claude self-verifies without being told to; "double-check your work," "include a final verification step," or "use a subagent to verify" cause over-verification and wasted tokens with no gain in quality. Strip such lines out of the user's draft too rather than polishing them.
+- **Never add thoroughness or narration scaffolding.** Anti-laziness exhortations ("be exhaustive," "don't be lazy") and forced progress updates stack on behavior the model already has, producing scope creep and noise instead of diligence.
+- **Plain tool guidance, not shouted.** Write "Use X when…", not "CRITICAL: YOU MUST use X" — current models overtrigger on shouted nudges, firing tools where a plain description would have them wait.
+- **State scope explicitly — including what is out.** Claude expands scope on its own judgment, adding steps that were not requested; narrow tasks need a scope statement in the prompt ("deliver what was asked, at the scope intended; stop short of additions that are clearly beyond it").
 - **Rules with rationale beat bare imperatives.** Strings of all-caps MUST/NEVER give the model rules without context; stating the rule plus the reason lets it generalize correctly to cases the prompt never anticipated.
 - **Positive examples beat negative instructions.** Showing the desired behavior steers more reliably than listing prohibitions.
-- **Specify length and verbosity when they matter.** The model calibrates response length to perceived task complexity; if the user needs a particular length or depth, say so explicitly rather than relying on defaults.
+- **Specify length and verbosity.** Claude is more verbose by default than earlier models, and written deliverables run long; brevity is never inherited, so state the target length or depth explicitly whenever it matters at all.
 - **Specify voice when it matters.** The default register is direct and concise; a warmer, more validating, or more formal voice must be requested in the prompt.
-- **Every token must earn its place.** Claude is already highly capable — include only context it cannot know (domain specifics, preferences, constraints), not general knowledge or filler. Check the finished prompt for internal contradictions.
+- **Every token must earn its place.** Claude is already highly capable — include only context it cannot know (domain specifics, preferences, constraints), not general knowledge or filler. The biggest wins now come from removing instructions rather than adding them. Check the finished prompt for internal contradictions.
 - **No API-only concepts** in Claude.ai-targeted prompts: no effort levels, thinking budgets, temperature, or system-role syntax. If deeper reasoning is wanted, use plain language ("think through the edge cases before answering").
-- **When the output is itself a skill:** frontmatter description in third person covering both what it does and when to trigger; name in lowercase letters, numbers, and hyphens; body well under 500 lines; no time-sensitive claims that will silently rot.
+- **When the output is itself a skill:** frontmatter description in third person covering both what it does and when to trigger; name in lowercase letters, numbers, and hyphens; body well under 500 lines; no time-sensitive claims that will silently rot. For agentic surfaces, front-load the complete task spec rather than expecting it to arrive turn by turn, define "done" as a check the model can actually run, and cap subagent delegation explicitly (Claude delegates readily, which multiplies cost on small tasks).
 
 ## Use-time input
 
