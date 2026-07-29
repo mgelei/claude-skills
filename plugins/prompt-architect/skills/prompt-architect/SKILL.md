@@ -22,7 +22,7 @@ Infer this from the input whenever possible; it is usually evident ("I need proj
 
 ### Run the full analysis checklist
 
-Err on the side of exhaustiveness: a missed material decision costs the user far more than a long list, and importance ordering (Step 2) protects a tiring user from skipping what matters. Check at minimum:
+Surface every material decision as its own item — importance ordering (Step 2) protects a tiring user from skipping what matters — but include only decisions genuinely material to this prompt; a padded list buries the ones that count. Check at minimum:
 
 - Purpose and success criteria — what does an excellent response look like?
 - Audience and context the target Claude will not have
@@ -82,7 +82,7 @@ Example of a list mid-iteration:
 - Choose the outer fence so it can't be terminated from inside: it must be a backtick run longer than any run appearing within the prompt. If the prompt contains nested triple-backtick code examples, wrap the whole thing in four backticks (or more); count the longest inner run and add at least one.
 - Structure the prompt as sensible sections (markdown headers or XML tags grouping distinct concerns — role/context, task, output format, constraints, examples, edge cases as applicable). Never a single wall of text.
 - Weave accepted defaults and user overrides into the prose naturally, as if written in one voice from scratch.
-- Before sending, scan the rendered prompt for leftover scaffolding: bracketed fields, `TBD`, "insert here", or any unresolved placeholder, and confirm every accepted override actually made it into the text. The deliverable ships finished — nothing for the user to fill in that the loop was supposed to settle.
+- The deliverable ships finished: no bracketed fields, `TBD`, "insert here", or unresolved placeholders, and every accepted override present in the text — nothing left for the user to fill in that the loop was supposed to settle.
 
 ## Step 5 — After rendering
 
