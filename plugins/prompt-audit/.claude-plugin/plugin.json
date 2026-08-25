@@ -1,0 +1,9 @@
+{
+  "name": "prompt-audit",
+  "description": "Audits an existing prompt against Claude Opus 5 practices, reports the highest-impact findings, and rewrites it on confirmation.",
+  "version": "1.0.0",
+  "author": { "name": "Mate Gelei-Szego" },
+  "homepage": "https://mate.gelei.dev",
+  "repository": "https://github.com/mgelei/claude-skills",
+  "license": "MIT"
+}

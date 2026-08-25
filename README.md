@@ -1,6 +1,6 @@
 # claude-skills
 
-A Claude plugin marketplace with three structured-thinking skills: decision interviews, prompt refinement, and project bootstrapping.
+A Claude plugin marketplace with four structured-thinking skills: decision interviews, prompt refinement and auditing, and project bootstrapping.
 
 ## Install
 
@@ -23,6 +23,10 @@ Settings → Customize → plugins → **Add marketplace** → `mgelei/claude-sk
 ```
 
 ```
+/plugin install prompt-audit@mgelei
+```
+
+```
 /plugin install bootstrap-project@mgelei
 ```
 
@@ -31,5 +35,6 @@ Settings → Customize → plugins → **Add marketplace** → `mgelei/claude-sk
 ## Skills
 
 - **[prompt-architect](plugins/prompt-architect/skills/prompt-architect/SKILL.md)** — Refines a rough prompt idea into a polished, Claude-optimized prompt through a structured clarification loop, then renders the final prompt as structured text in a code block.
+- **[prompt-audit](plugins/prompt-audit/skills/prompt-audit/SKILL.md)** — Audits an existing prompt against Claude Opus 5 practices, reports the highest-impact findings for confirmation, then renders the rewritten prompt in a code block.
 - **[challenge-me](plugins/challenge-me/skills/challenge-me/SKILL.md)** — Pressure-tests a plan, design, or proposal through a depth-first interview — one decision per turn with a recommendation, alternatives, and rationale — then produces a self-contained decision record for handoff.
 - **[bootstrap-project](plugins/bootstrap-project/skills/bootstrap-project/SKILL.md)** — Turns a rough software or product idea into durable, reviewable project foundations before any code is written, through an iterative decision interview backed by research and a running decision register, culminating in a high-level project spec.

@@ -1,6 +1,6 @@
 ---
 name: prompt-architect
-description: Refines a rough prompt idea into a polished, Claude-optimized prompt (tuned for the Claude Opus 5 generation) through a structured clarification loop. Analyzes the idea for open questions, vague parts, and pitfalls, presents them as a stable numbered list with recommended defaults, iterates on the user's overrides, and renders the final prompt as structured text in code blocks. Use whenever the user has an idea for a prompt they want created, refined, reviewed, or optimized — one-off prompts, project instructions, styles, or skill instructions targeting Claude — even when they don't use the word "prompt" but describe wanting Claude to behave a certain way reliably.
+description: Refines a rough prompt idea into a polished, Claude-optimized prompt (tuned for the Claude Opus 5 generation) through a structured clarification loop. Analyzes the idea for open questions, vague parts, and pitfalls, presents them as a stable numbered list with recommended defaults, iterates on the user's overrides, and renders the final prompt as structured text in code blocks. Use whenever the user has an idea, sketch, or set of requirements for a prompt they want built — one-off prompts, project instructions, styles, or skill instructions targeting Claude — even when they don't use the word "prompt" but describe wanting Claude to behave a certain way reliably. Not for auditing or rewriting a prompt the user has already written out in full.
 ---
 
 # Prompt Architect
