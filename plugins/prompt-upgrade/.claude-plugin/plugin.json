@@ -1,9 +1,0 @@
-{
-  "name": "prompt-upgrade",
-  "description": "Audits an existing prompt against Claude Opus 5 prompting practices and rewrites it in an Opus 5 optimized format.",
-  "version": "1.0.0",
-  "author": { "name": "Mate Gelei-Szego" },
-  "homepage": "https://mate.gelei.dev",
-  "repository": "https://github.com/mgelei/claude-skills",
-  "license": "MIT"
-}
