@@ -1,7 +1,7 @@
 {
   "name": "mgelei",
   "owner": { "name": "Mate Gelei-Szego" },
-  "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement and upgrades, and project bootstrapping.",
+  "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement and auditing, and project bootstrapping.",
   "plugins": [
     {
       "name": "challenge-me",
@@ -14,9 +14,9 @@
       "description": "Refines a rough prompt idea into a polished, Claude-optimized prompt through a structured clarification loop."
     },
     {
-      "name": "prompt-upgrade",
-      "source": "./plugins/prompt-upgrade",
-      "description": "Audits an existing prompt against Claude Opus 5 prompting practices and rewrites it in an Opus 5 optimized format."
+      "name": "prompt-audit",
+      "source": "./plugins/prompt-audit",
+      "description": "Audits an existing prompt against Claude Opus 5 practices, reports the highest-impact findings, and rewrites it on confirmation."
     },
     {
       "name": "bootstrap-project",

@@ -1,6 +1,6 @@
 {
-  "name": "prompt-upgrade",
-  "description": "Audits an existing prompt against Claude Opus 5 prompting practices and rewrites it in an Opus 5 optimized format.",
+  "name": "prompt-audit",
+  "description": "Audits an existing prompt against Claude Opus 5 practices, reports the highest-impact findings, and rewrites it on confirmation.",
   "version": "1.0.0",
   "author": { "name": "Mate Gelei-Szego" },
   "homepage": "https://mate.gelei.dev",
