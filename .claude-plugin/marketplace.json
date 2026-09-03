@@ -1,7 +1,7 @@
 {
   "name": "mgelei",
   "owner": { "name": "Mate Gelei-Szego" },
-  "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement and auditing, and project bootstrapping.",
+  "description": "Structured-thinking skills for Claude: decision interviews, prompt refinement and auditing, project bootstrapping, and researched product comparisons.",
   "plugins": [
     {
       "name": "challenge-me",
@@ -22,6 +22,11 @@
       "name": "bootstrap-project",
       "source": "./plugins/bootstrap-project",
       "description": "Turns a rough idea into durable project foundations via a decision interview, register, and high-level spec."
+    },
+    {
+      "name": "research-compare",
+      "source": "./plugins/research-compare",
+      "description": "Researches and compares products or services, then interviews the user to a high-confidence recommendation."
     }
   ]
 }
