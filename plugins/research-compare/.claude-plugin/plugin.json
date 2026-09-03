@@ -1,0 +1,9 @@
+{
+  "name": "research-compare",
+  "description": "Researches and compares products or services, then interviews the user to a high-confidence recommendation.",
+  "version": "1.0.0",
+  "author": { "name": "Mate Gelei-Szego" },
+  "homepage": "https://mate.gelei.dev",
+  "repository": "https://github.com/mgelei/claude-skills",
+  "license": "MIT"
+}
