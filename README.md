@@ -16,21 +16,9 @@ Settings → Customize → plugins → **Add marketplace** → `mgelei/claude-sk
 
 ```
 /plugin install challenge-me@mgelei
-```
-
-```
 /plugin install prompt-architect@mgelei
-```
-
-```
 /plugin install prompt-audit@mgelei
-```
-
-```
 /plugin install bootstrap-project@mgelei
-```
-
-```
 /plugin install research-compare@mgelei
 ```
 
