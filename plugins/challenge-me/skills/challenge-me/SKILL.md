@@ -47,7 +47,7 @@ Each turn contains, in order:
 3. One to three viable alternatives with their trade-offs (omit if none genuinely exist)
 4. The question itself
 
-No running status dashboard in regular turns — keep turns light. When a structured question or elicitation tool is available in the environment, use it liberally: present the recommendation and alternatives as tappable options rather than prose the user must type against.
+No running status dashboard in regular turns — keep turns light. When a structured question or elicitation tool is available in the environment, use it for each turn's question: present the recommendation and alternatives as tappable options rather than prose the user must type against.
 
 ### Handling user responses
 

@@ -1,13 +1,13 @@
 ---
 name: prompt-audit
-description: Audits an existing, already-written prompt against Claude Opus 5 prompting practices, reports the highest-impact findings — what to remove, add, and keep, each with a one-line rationale — asks for a single yes/no confirmation, then renders the rewritten prompt in a code block. Use whenever the user has a prompt, system prompt, project instructions, custom style, CLAUDE.md, agent instructions, or a SKILL.md already written out and wants it audited, reviewed, critiqued, fixed, upgraded, migrated, or optimized — including when they only paste the text and ask what is wrong with it, or point at a file and ask whether it is any good.
+description: Audits an existing, already-written prompt against Claude Opus 5.5 prompting practices, reports the highest-impact findings — what to remove, add, and keep, each with a one-line rationale — asks for a single yes/no confirmation, then renders the rewritten prompt in a code block. Use whenever the user has a prompt, system prompt, project instructions, custom style, CLAUDE.md, agent instructions, or a SKILL.md already written out and wants it audited, reviewed, critiqued, fixed, upgraded, migrated, or optimized — including when they only paste the text and ask what is wrong with it, or point at a file and ask whether it is any good.
 ---
 
 # Prompt Audit
 
-Take a prompt the user has already written and bring it to the shape the Claude Opus 5 generation responds to best. The input arrives with its decisions already made, so this skill audits and rewrites rather than interviewing — but nothing is rewritten until the user has seen the findings and said yes.
+Take a prompt the user has already written and bring it to the shape Claude Opus 5.5 responds to best. The input arrives with its decisions already made, so this skill audits and rewrites rather than interviewing — but nothing is rewritten until the user has seen the findings and said yes.
 
-Before auditing, read `references/opus5-audit-checklist.md`. It governs what counts as a finding and what the rewrite should look like.
+Before auditing, read `references/audit-checklist.md`. It governs what counts as a finding and what the rewrite should look like.
 
 ## Step 1 — Locate the prompt and its surface
 
@@ -16,7 +16,7 @@ Find the prompt: pasted in the message, attached, earlier in the conversation, o
 Then infer, asking only when genuinely unsure, since several findings are surface-specific:
 
 - **Target surface** — one-off chat prompt, project instructions or custom style, `SKILL.md`, `CLAUDE.md` or agent instructions, or an API system prompt.
-- **Whether API call parameters accompany the prompt** — effort, `max_tokens`, `thinking`, `budget_tokens`, prefilled turns. If the user shows call code alongside the prompt, those are in scope.
+- **Whether API call parameters accompany the prompt** — effort, `max_tokens`, `thinking` and `budget_tokens`, `tool_choice`, prefilled turns. If the user shows call code alongside the prompt, those are in scope.
 
 ## Step 2 — Audit
 

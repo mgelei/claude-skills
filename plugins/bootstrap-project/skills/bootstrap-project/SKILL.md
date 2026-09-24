@@ -46,7 +46,7 @@ Interview the user about the consequential decisions: product goals, scope, stac
 
 - Batch 3–5 related questions per round (e.g., all data-layer questions together), ordered by downstream impact so the answers that constrain everything else get settled first.
 - Every question ships with a recommended default and a one-line rationale, so the user can answer fast or simply say "take your defaults" — which confirms those specific recommendations.
-- If a structured question or elicitation tool is available in the environment, use it liberally: present each round's questions as tappable options with the recommended default marked. Fall back to plain text questions when no such tool exists.
+- If a structured question or elicitation tool is available in the environment, use it for each round: present the questions as tappable options with the recommended default marked. Fall back to plain text questions when no such tool exists.
 
 **Discussion pauses:** if the user can't commit to a decision right away, drop out of interview mode and discuss it openly — explore trade-offs, research options, compare approaches — without pressuring a choice. The item stays Open until the user resolves it. When the discussion concludes, record the outcome in the register (Confirmed if resolved; still Open with notes if not), briefly restate where the interview left off, and resume the current round without re-asking anything already answered.
 

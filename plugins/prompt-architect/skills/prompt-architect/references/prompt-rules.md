@@ -1,4 +1,4 @@
-# Composing prompts for the Claude Opus 5 generation
+# Composing prompts for Claude Opus 5.5
 
 Read this before analyzing a prompt idea and again when composing the final prompt. Governing principle: **these models reward completeness of specification and punish density of instruction.** A good prompt raises the first while lowering the second — the best prompt achieves its goals reliably with minimal necessary structure. The model performs best when given the complete task specification up front and left to run; most legacy prompt scaffolding exists to compensate for weaker models and now actively hurts.
 
@@ -7,16 +7,19 @@ Read this before analyzing a prompt idea and again when composing the final prom
 Strip these wherever they appear in the user's idea (surfacing the removal as a list item when the user explicitly wrote them; see SKILL.md):
 
 - **Verification scaffolding** — "verify your work," "double-check," "include a final verification step," "use a subagent to verify." The model self-verifies unprompted; these compound with that behavior and waste tokens with no quality gain. Remove rather than rewrite. (Giving the model *mechanisms* to check its work — a test suite, a browser — is different and good.)
-- **Chain-of-thought scaffolding** — "think step by step," manual `<thinking>`/`<answer>` wrappers. Thinking is on by default and cannot be turned off in Claude.ai.
-- **Anti-thinking rules** — any line telling the model not to reason or think increases internal-tag leakage into output.
+- **Chain-of-thought scaffolding** — "think step by step." Thinking is always on and cannot be turned off; how much the model thinks is an effort setting, not prompt text.
+- **Reasoning-display requests** — "show your reasoning," "write out your thinking before the answer," manual `<thinking>`/`<answer>` wrappers, a required reasoning section. The model can decline a request to reproduce its internal reasoning in the response, so these risk a refused turn, not just wasted tokens. A justification the reader actually needs — the rationale behind a recommendation, the assumptions behind a figure — is deliverable content and stays.
+- **Thinking-depth rules** — "don't think, just answer," "don't overthink," "think harder." Thinking is always on, so a don't-think rule cannot be followed; depth belongs to the effort setting (Pass 6), which moves thinking, cost, and latency more reliably than prose.
 - **Anti-laziness encouragement** — "be thorough," "don't be lazy," "complete the full task, no stubs." The model already completes tasks; this now feeds verbosity and scope creep. Replace with a concrete checklist of what completeness means for this task.
 - **Aggressive tool-forcing** — "CRITICAL: you MUST use X," "if in doubt, use X," "default to using X." Written to fix undertriggering in older models; now causes overtriggering. Replace with plain conditions: "Use X when…"
+- **Update suppressors** — "don't narrate," "no interim updates," "hold all findings for the final response." Written against chattier models; with them present the model goes quiet for a whole agentic turn. Replace with a statement of when user-facing text is wanted (Pass 3).
 - **Duplicated instructions** — the same rule stated in several places costs context and adherence; state it once, where it best belongs.
 - **Facts the model can infer** from attached files, the repo, or the conversation. Pure context tax.
 - **Worked examples of tool usage or process** — they narrow the exploration space. Examples of *output format and voice* remain effective (a few diverse ones); examples of *how to work* do not.
-- **Rigid style prohibitions** — "never write X." Replace with judgment framing: "match the surrounding code's comment density," "write in the register of the examples."
+- **Visual-input scaffolding** — step-by-step chart-reading instructions, "transcribe the image first" pre-passes, mandatory crop or zoom steps. The model reads charts, diagrams, and screenshots precisely without them. Pointing it at image tools or higher-resolution sources for the densest material, such as technical drawings, is different and still helps.
+- **Rigid style prohibitions** — "never write X." Replace with judgment framing: "match the surrounding code's comment density," "write in the register of the examples." One exception: frontend and visual design. Asked for design work without direction, the model falls back on a few default styles, and a vague "avoid a generic AI look" only swaps one default for another. There, keep the positive direction and name the specific patterns to avoid ("no cream or off-white background, italic accent words in headlines, numbered '01/02/03' section labels, monospace labels, or pill-shaped buttons"); if the user wrote only the vague line, surface rewriting it into named patterns as an item.
 - **Restrictive output qualifiers** when full coverage is actually wanted — "only report high-severity issues," "be conservative." The model obeys them literally and suppresses real findings. Have it generate everything and filter in a separate pass or a follow-up instruction.
-- **API-only concepts in prompt text** — effort levels, thinking budgets, temperature, prefill patterns, system-role syntax. None of these work as prompt text in Claude apps; wanting deeper reasoning is expressed in plain language ("think through the edge cases before answering") or via the app's effort setting.
+- **API-only concepts in prompt text** — effort levels, thinking budgets, temperature, prefill patterns, system-role syntax. None of these work as prompt text in Claude apps. Deeper or lighter reasoning is the app's effort setting, suggested in meta-advice; the prompt can still name what the reasoning must cover ("account for leap years and time-zone changes"), which is context rather than depth steering.
 
 ## Pass 2 — Complete the specification
 
@@ -33,14 +36,14 @@ Ensure the prompt contains, up front rather than drip-fed:
 
 ## Pass 3 — Calibrate output behavior
 
-Include only the ones that matter for this prompt:
+These lines were tuned against the Claude Opus 5 generation's habits: long responses, heavy narration, scope expansion, narrated self-corrections, ready delegation. Claude Opus 5.5 reports more plainly and finishes tasks in fewer tokens, so it may not need them, but they remain the tested starting point. Include one only when the prompt's use case would suffer from the behavior it controls, never by reflex:
 
-- **Length, explicitly** — for the response *and* for any written deliverable. Default output runs long, and no setting controls visible length; only prompt text does. "Keep responses focused and concise; spend most of the response on the main answer, keep caveats short."
-- **Scope boundary** for narrow tasks — the model expands scope on its own judgment. "Deliver what was asked, at the scope intended. If a better approach exists, say so in a sentence and continue with the task as asked rather than quietly narrowing, widening, or transforming it."
-- **Narration control** for agentic prompts — "Before your first tool call, say in one sentence what you're about to do. While working, update only on important findings or direction changes. When you finish, lead with the outcome."
+- **Length, explicitly** — for the response *and* for any written deliverable. No setting controls visible length — effort governs thinking, not output size — so only prompt text does. "Keep responses focused and concise; spend most of the response on the main answer, keep caveats short."
+- **Scope boundary** for narrow tasks — "Deliver what was asked, at the scope intended. If a better approach exists, say so in a sentence and continue with the task as asked rather than quietly narrowing, widening, or transforming it."
+- **When to talk** for agentic prompts — say when user-facing text is wanted and what it should contain, not how little: "Before your first tool call, say in one sentence what you're about to do. When you find something that changes the plan, say so briefly. When you finish, lead with the outcome."
 - **Correction narration** — "Only flag a correction when the error would change the user's conclusions or decisions; otherwise fix it and move on."
-- **Delegation cap** where subagents exist — the model delegates readily, which multiplies cost on small tasks. "Delegate only large, genuinely independent, parallelizable work."
-- **Voice and style** for user-facing prose — the default register is capable but formulaic; a specific voice must be asked for, ideally with a short positive example rather than prohibitions.
+- **Delegation cap** where subagents exist — unneeded subagents multiply cost on small tasks. "Delegate only large, genuinely independent, parallelizable work."
+- **Voice and style** for user-facing prose — a specific voice must be asked for, ideally with a short positive example rather than prohibitions.
 
 ## Pass 4 — Structure
 
@@ -48,7 +51,7 @@ Include only the ones that matter for this prompt:
 - **XML tags only when the prompt genuinely mixes content types** (instructions + data + examples). Never tag a three-sentence request; markdown headers suffice for most structured prompts.
 - **The prompt's own formatting is a signal** — its style influences the response style. Write the prompt in the shape you want back: prose begets prose, dense markdown begets dense markdown.
 - **References beat descriptions** — an attached mockup, test file, or sample output outperforms a paragraph describing it. When the user has such material, have the prompt point to it rather than paraphrase it.
-- **Positive examples beat prohibitions** for steering format and tone.
+- **Positive examples beat prohibitions** for steering format and tone — except named design defaults (Pass 1).
 
 ## Pass 5 — Route content to the right surface
 
@@ -64,7 +67,8 @@ Some content the user wants "in the prompt" belongs elsewhere. Flag routing in t
 
 ## Pass 6 — Settings advice (meta-advice, never prompt text)
 
-- Suggest an effort level when relevant: low/medium are strong and cheap for routine work, high is the default balance, xhigh suits long agentic coding, max the deepest reasoning. Effort controls thinking depth and thoroughness — **not** response length; length stays a prompt job.
+- Suggest an effort level when relevant. Effort is the only control over how much the model thinks, and with it latency and cost. `medium` is the API default and a strong starting point — it beats Claude Opus 5 at `high` on coding and knowledge work; `low` suits routine or latency-sensitive work; reserve `xhigh` and `max` for work where more thinking has measurably paid off. To get less thinking, lower effort rather than adding "think less" text. Effort controls thinking depth and thoroughness — **not** response length; length stays a prompt job.
+- For API-bound prompts, also advise: set `effort` explicitly rather than inheriting the default; leave `thinking` unset (`disabled` and `budget_tokens` are rejected); size `max_tokens` for thinking plus the reply; and if users should see progress during agentic turns, request `thinking.display: "updates"` (beta), because text between tool calls arrives in `thinking` blocks.
 
 ## When the output is itself a skill
 

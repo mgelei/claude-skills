@@ -1,13 +1,13 @@
 ---
 name: prompt-architect
-description: Refines a rough prompt idea into a polished, Claude-optimized prompt (tuned for the Claude Opus 5 generation) through a structured clarification loop. Analyzes the idea for open questions, vague parts, and pitfalls, presents them as a stable numbered list with recommended defaults, iterates on the user's overrides, and renders the final prompt as structured text in a code block. Use whenever the user has an idea, sketch, or set of requirements for a prompt they want built — one-off prompts, project instructions, styles, or skill instructions targeting Claude — even when they don't use the word "prompt" but describe wanting Claude to behave a certain way reliably. Not for auditing or rewriting a prompt the user has already written out in full.
+description: Refines a rough prompt idea into a polished, Claude-optimized prompt (tuned for Claude Opus 5.5) through a structured clarification loop. Analyzes the idea for open questions, vague parts, and pitfalls, presents them as a stable numbered list with recommended defaults, iterates on the user's overrides, and renders the final prompt as structured text in a code block. Use whenever the user has an idea, sketch, or set of requirements for a prompt they want built — one-off prompts, project instructions, styles, or skill instructions targeting Claude — even when they don't use the word "prompt" but describe wanting Claude to behave a certain way reliably. Not for auditing or rewriting a prompt the user has already written out in full.
 ---
 
 # Prompt Architect
 
 Turn a rough prompt idea into a production-quality Claude prompt through a clarification loop, then render it. The loop makes the user take every material decision consciously instead of inheriting silent assumptions; the strict list format keeps the loop stable over many iterations.
 
-Read `references/opus5-rules.md` in full at the start of every session, even if it looks familiar. It governs what gets fixed silently during analysis and how the final prompt is composed.
+Read `references/prompt-rules.md` in full at the start of every session, even if it looks familiar. It governs what gets fixed silently during analysis and how the final prompt is composed.
 
 ## Step 1 — Analyze the idea
 
@@ -67,7 +67,7 @@ Rules:
 - Parse multi-part replies ("2: no emojis, delete 4, also I'm worried about X") in one pass: apply every override and deletion, then append genuinely new concerns as fresh items.
 - Merge a partial override into the existing default rather than replacing the text wholesale, and show the merged wording in the item so the user validates it before it reaches the final prompt. For substantive constraints the user's explicit wording wins over any paraphrase.
 - Add new items only when something triggers them (an answer opens a follow-up, an override creates a gap). Do not pad.
-- If an override contradicts `references/opus5-rules.md`, push back once, inside the item's own line: the override, then the concern in a clause ("— note: Claude already self-verifies; this line adds cost without quality"). If the user reaffirms, comply without further comment; it is their prompt.
+- If an override contradicts `references/prompt-rules.md`, push back once, inside the item's own line: the override, then the concern in a clause ("— note: Claude already self-verifies; this line adds cost without quality"). If the user reaffirms, comply without further comment; it is their prompt.
 - If an override contradicts another item or an earlier override, append a new item naming the conflict and recommending a resolution. Never silently obey one side or silently fix it.
 
 Acceptance:
@@ -80,7 +80,7 @@ Acceptance:
 
 - The prompt comes first, inside a code block. For an accepted split across surfaces, render one code block per destination, each preceded by a single bold one-line label ("**Project instructions**", "**Per-task message**").
 - Choose an outer fence that cannot be terminated from inside: at least four backticks, and longer than any backtick run within the prompt.
-- Structure the prompt as sensible sections — markdown headers or XML tags grouping distinct concerns (role/context, task, output format, constraints, examples, edge cases as applicable), scaled to the prompt's size per `references/opus5-rules.md`. Never a single wall of text.
+- Structure the prompt as sensible sections — markdown headers or XML tags grouping distinct concerns (role/context, task, output format, constraints, examples, edge cases as applicable), scaled to the prompt's size per `references/prompt-rules.md`. Never a single wall of text.
 - Weave accepted defaults and overrides into plain, direct prose in one voice, as if written from scratch. No mannered flourishes or dense multi-clause sentences: the target model reads instructions literally, so every sentence should carry an instruction or its rationale.
 - Ship it finished: every accepted override present, nothing the loop was meant to settle left open. The only fill-in content allowed is the use-time slots below.
 - After the code block(s), meta-advice stays to a few sentences: where the prompt belongs if not obvious, a suggested effort setting, and anything intentionally left out and why. No restating or praising the prompt, no usage walkthrough.
