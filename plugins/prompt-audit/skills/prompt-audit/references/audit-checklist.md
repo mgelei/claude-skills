@@ -10,6 +10,7 @@ This is the *why* behind every Remove item; state it once rather than repeating 
 - Thinks on every request. Thinking cannot be turned off; effort is the only control over how much.
 - Reports on its work plainly: updates and final summaries say what it did, what it found, and what it needs.
 - Reads charts, diagrams, and screenshots precisely without extra scaffolding.
+- Keeps most of its notes between tool calls out of the visible text, and finishes tasks in fewer tokens than Claude Opus 5.
 
 Instructions written to coax these behaviors out of earlier models now stack on top of them, producing over-verification, token waste, and unrequested work.
 
@@ -43,20 +44,19 @@ Items 7, 8, 9, and 14 become edits rather than deletions.
 
 Only where the prompt's intent calls for it — an Add that the prompt does not need is the same density problem from the other direction.
 
-The length, scope, narration, correction, and delegation lines below were tuned against the Claude Opus 5 generation's habits. Claude Opus 5.5 reports more plainly and finishes tasks in fewer tokens, so it may not need them: add one only where the prompt's use would suffer from the behavior it controls.
+Every Add targets Claude Opus 5.5. The correction-narration, delegation-cap, and anti-verbosity remedies written for Claude Opus 5 are not Adds for this model; see Retune for what to do when a prompt already carries them.
 
 - **The complete spec up front** — goal, inputs and where they arrive, constraints that cannot be inferred, and a definition of done. The model performs best given the full specification and left to run; drip-feeding across turns costs more than it saves.
-- **Explicit length calibration**, for the response *and* for any written deliverable. No setting controls visible length — effort governs thinking depth, not output size — so only prompt text can.
+- **Explicit length calibration**, for the response *and* for any written deliverable. No setting controls visible length — effort governs thinking depth, not output size — so only prompt text can. State the target the use calls for, not a generic "be concise."
 - **A scope boundary** for narrow tasks: deliver what was asked at the scope intended, flag a better approach in a sentence rather than quietly transforming the task.
-- **When to talk**, for agentic prompts — say when user-facing text is wanted and what it contains, not how little: one sentence before the first tool call, a brief note when a finding changes the plan, outcome first at the end.
-- **Correction-narration control** — flag a correction only when the error changes the user's conclusions or decisions.
-- **A delegation cap** where subagents exist — delegate only large, genuinely independent, parallelizable work; never to double-check its own output.
+- **When to talk**, for agentic or human-in-the-loop prompts — a user watching a long run sees little text unless the prompt asks for it. Say when user-facing text is wanted and what it contains: one line of intent before the first tool call, and a short recap at the end of what was done, what was found, and what is needed from the user.
 - **Output format and audience** — format instructions carry more weight than usual, since no setting shapes them.
 - **The why behind non-obvious constraints** — a rule with its rationale generalizes to cases the prompt never anticipated.
 - **Permission to say "I don't know"** — reduces fabrication.
 - **Escalation points** for unattended or agentic runs — when to stop and ask versus decide alone.
 - **Voice and style** for user-facing prose, ideally with a short positive example rather than prohibitions.
 - **Named design defaults to avoid**, when the prompt asks for frontend or visual design without giving a direction.
+- **What to read off the images**, for image-heavy prompts — the information wanted, not a reading procedure; for dense technical drawings, higher-resolution inputs or image tools.
 
 ## Keep
 
@@ -69,10 +69,20 @@ Name these in the report so the user knows what survived, and strengthen them wh
 - A role, where the surface supports one.
 - Long inputs at the top with the query at the end.
 - Positive instructions over prohibitions.
-- Calibration lines already present for Claude Opus 5 (conciseness, scope, correction narration, delegation caps). On Claude Opus 5.5 they are re-test candidates, not removals: keep them, and tell the user that removing them is a test to run on their own cases. Any part that suppresses updates is still Remove item 9.
 - Lists naming specific design defaults to avoid.
 - Image-processing tools (crop, zoom, measure) and higher-resolution inputs for the densest visual material, such as technical drawings.
 - A rationale the reader needs in the deliverable — why a recommendation wins, the assumptions behind a figure. That is content, not reasoning extraction.
+
+## Retune — Claude Opus 5 calibration lines
+
+Prompts tuned for Claude Opus 5 often carry lines that countered its habits: long responses, heavy narration, scope expansion, narrated self-corrections, ready delegation. Claude Opus 5.5 may not share those habits, so convert each line to what the prompt needs on Claude Opus 5.5 rather than carrying it over unchanged:
+
+- **Conciseness blocks** → a length target tied to the prompt's use, in one line.
+- **Narration blocks** ("update only on important findings," long "how to communicate with the user" sections) → the When-to-talk line from Add. Drop the parts that ask for plain, jargon-free reporting; Claude Opus 5.5 already reports that way.
+- **Scope-discipline blocks** → one sentence of scope boundary when the task is narrow; otherwise remove.
+- **Correction-narration and delegation-cap blocks** → remove, unless the surface has the behavior in play (subagents available, long user-facing sessions) and the user says it still occurs; then keep a one-line version.
+
+Report these as medium confidence: the removal is untested on the user's own cases, so tell them which lines to restore if the old behavior returns.
 
 ## Structure of the rewrite
 

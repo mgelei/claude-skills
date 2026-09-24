@@ -1,6 +1,6 @@
 ---
 name: prompt-audit
-description: Audits an existing, already-written prompt against Claude Opus 5.5 prompting practices, reports the highest-impact findings — what to remove, add, and keep, each with a one-line rationale — asks for a single yes/no confirmation, then renders the rewritten prompt in a code block. Use whenever the user has a prompt, system prompt, project instructions, custom style, CLAUDE.md, agent instructions, or a SKILL.md already written out and wants it audited, reviewed, critiqued, fixed, upgraded, migrated, or optimized — including when they only paste the text and ask what is wrong with it, or point at a file and ask whether it is any good.
+description: Audits an existing, already-written prompt against Claude Opus 5.5 prompting practices, reports the highest-impact findings — what to remove, add, retune, and keep, each with a one-line rationale — asks for a single yes/no confirmation, then renders the rewritten prompt in a code block. Use whenever the user has a prompt, system prompt, project instructions, custom style, CLAUDE.md, agent instructions, or a SKILL.md already written out and wants it audited, reviewed, critiqued, fixed, upgraded, migrated, or optimized — including when they only paste the text and ask what is wrong with it, or point at a file and ask whether it is any good.
 ---
 
 # Prompt Audit
@@ -20,7 +20,7 @@ Then infer, asking only when genuinely unsure, since several findings are surfac
 
 ## Step 2 — Audit
 
-Run the checklist against the prompt and classify every finding as **Remove**, **Add**, or **Keep**, plus **API parameters** when the prompt is API-bound.
+Run the checklist against the prompt and classify every finding as **Remove**, **Add**, **Retune**, or **Keep**, plus **API parameters** when the prompt is API-bound.
 
 Give each finding a one-line rationale tied to the model behavior that motivates it, so the user can judge the call without taking it on faith.
 
@@ -28,7 +28,7 @@ Use judgment on ambiguous passages: a "verify" or "be conservative" line may be 
 
 ## Step 3 — Report the most impactful findings
 
-Report as bullets grouped under Remove / Add / Keep (and API parameters), most impactful first, skipping any empty group.
+Report as bullets grouped under Remove / Add / Retune / Keep (and API parameters), most impactful first, skipping any empty group.
 
 Cap the report at the findings that actually change behavior — roughly three to seven bullets — and roll the remainder into one closing line ("plus a few smaller tightenings"). The report exists to make the rewrite auditable, not to restate the checklist.
 
@@ -47,12 +47,12 @@ If the user replies with feedback instead of a yes, apply it as an override to t
 The rewritten prompt comes first, in a single code block:
 
 - Choose an outer fence of at least four backticks, always longer than any backtick run appearing inside the prompt.
-- Write it in one voice, as though composed from scratch. Never a marked-up diff — the result should not read as an edited document.
+- Write it for Claude Opus 5.5 as the executing model, in one voice, as though composed from scratch. Never a marked-up diff — the result should not read as an edited document.
 - Structure it in sections — markdown headers or XML tags grouping role and context, task, output format, constraints, examples, and edge cases as applicable, scaled to the prompt's size. Never a wall of text.
 - No `{{variables}}` or `[PLACEHOLDER]` tokens unless the surface genuinely supports hand-filled slots the user maintains themselves. Where the original had them and the surface cannot support them, encode the input mechanism in natural phrasing instead.
 - For substantive domain constraints, the user's explicit wording wins over any paraphrase.
 
-After the code block, at most a few sentences of meta-advice: content that belongs on a different surface, a suggested effort level, anything deliberately left out and why. No praise, no walkthrough.
+After the code block, at most a few sentences of meta-advice: content that belongs on a different surface, a suggested Claude Opus 5.5 effort level (`medium` is the starting point; `low` for routine or latency-sensitive work), anything deliberately left out and why. No praise, no walkthrough.
 
 ## Step 6 — Write-back, when the source was a file
 

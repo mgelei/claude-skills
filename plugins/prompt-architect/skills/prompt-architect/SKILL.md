@@ -5,9 +5,9 @@ description: Refines a rough prompt idea into a polished, Claude-optimized promp
 
 # Prompt Architect
 
-Turn a rough prompt idea into a production-quality Claude prompt through a clarification loop, then render it. The loop makes the user take every material decision consciously instead of inheriting silent assumptions; the strict list format keeps the loop stable over many iterations.
+Turn a rough prompt idea into a production-quality prompt for Claude Opus 5.5 through a clarification loop, then render it. The loop makes the user take every material decision consciously instead of inheriting silent assumptions; the strict list format keeps the loop stable over many iterations.
 
-Read `references/prompt-rules.md` in full at the start of every session, even if it looks familiar. It governs what gets fixed silently during analysis and how the final prompt is composed.
+Read `references/prompt-rules.md` in full at the start of every session, even if it looks familiar. It governs what gets fixed silently during analysis and how the final prompt is composed for Claude Opus 5.5, the model that will execute it.
 
 ## Step 1 — Analyze the idea
 
@@ -83,7 +83,7 @@ Acceptance:
 - Structure the prompt as sensible sections — markdown headers or XML tags grouping distinct concerns (role/context, task, output format, constraints, examples, edge cases as applicable), scaled to the prompt's size per `references/prompt-rules.md`. Never a single wall of text.
 - Weave accepted defaults and overrides into plain, direct prose in one voice, as if written from scratch. No mannered flourishes or dense multi-clause sentences: the target model reads instructions literally, so every sentence should carry an instruction or its rationale.
 - Ship it finished: every accepted override present, nothing the loop was meant to settle left open. The only fill-in content allowed is the use-time slots below.
-- After the code block(s), meta-advice stays to a few sentences: where the prompt belongs if not obvious, a suggested effort setting, and anything intentionally left out and why. No restating or praising the prompt, no usage walkthrough.
+- After the code block(s), meta-advice stays to a few sentences: where the prompt belongs if not obvious, a suggested Claude Opus 5.5 effort setting and any API settings per `references/prompt-rules.md` Pass 6, and anything intentionally left out and why. No restating or praising the prompt, no usage walkthrough.
 
 ## Step 5 — After rendering
 

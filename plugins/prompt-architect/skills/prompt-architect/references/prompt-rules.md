@@ -34,16 +34,18 @@ Ensure the prompt contains, up front rather than drip-fed:
 - **Permission to express uncertainty** — explicitly allowing "I don't know" reduces fabrication.
 - **Escalation points** for agentic or unattended prompts — when to stop and ask versus decide alone.
 
-## Pass 3 — Calibrate output behavior
+## Pass 3 — Calibrate output behavior for Claude Opus 5.5
 
-These lines were tuned against the Claude Opus 5 generation's habits: long responses, heavy narration, scope expansion, narrated self-corrections, ready delegation. Claude Opus 5.5 reports more plainly and finishes tasks in fewer tokens, so it may not need them, but they remain the tested starting point. Include one only when the prompt's use case would suffer from the behavior it controls, never by reflex:
+Claude Opus 5.5 writes plain, well-organized reports on its work, finishes tasks in fewer tokens than Claude Opus 5, and on agentic work keeps most of its between-tool-call notes out of the visible text. Calibrate the prompt for that model, not for the habits of earlier ones. Include only the lines this prompt's use needs:
 
-- **Length, explicitly** — for the response *and* for any written deliverable. No setting controls visible length — effort governs thinking, not output size — so only prompt text does. "Keep responses focused and concise; spend most of the response on the main answer, keep caveats short."
-- **Scope boundary** for narrow tasks — "Deliver what was asked, at the scope intended. If a better approach exists, say so in a sentence and continue with the task as asked rather than quietly narrowing, widening, or transforming it."
-- **When to talk** for agentic prompts — say when user-facing text is wanted and what it should contain, not how little: "Before your first tool call, say in one sentence what you're about to do. When you find something that changes the plan, say so briefly. When you finish, lead with the outcome."
-- **Correction narration** — "Only flag a correction when the error would change the user's conclusions or decisions; otherwise fix it and move on."
-- **Delegation cap** where subagents exist — unneeded subagents multiply cost on small tasks. "Delegate only large, genuinely independent, parallelizable work."
+- **Length, explicitly** — for the response *and* for any written deliverable. No setting controls visible length — effort governs thinking, not output size — so only prompt text does. State the target the use calls for ("a one-paragraph answer," "a two-page brief") rather than a generic "be concise."
+- **When to talk**, for agentic or human-in-the-loop prompts — a user watching a long run sees little text unless the prompt asks for it, so say when user-facing text is wanted and what it contains: "Before your first tool call, state in one line what you're going to do. When you finish, give a short recap: what you did, what you found, and anything you need from me."
+- **Scope boundary** for narrow tasks where a transformed result would be costly — "Deliver what was asked, at the scope intended. If a better approach exists, say so in a sentence and continue with the task as asked."
+- **Design direction** for frontend or visual work — the positive direction plus the named defaults to avoid (Pass 1). Without it the model falls back on a few default styles.
+- **Visual inputs** — say what to read off the images, not how to read them. For the densest material, such as technical drawings, arrange higher-resolution images or image tools (crop, zoom, measure) rather than a reading procedure.
 - **Voice and style** for user-facing prose — a specific voice must be asked for, ideally with a short positive example rather than prohibitions.
+
+Not defaults for Claude Opus 5.5: the correction-narration, delegation-cap, anti-verbosity, and long "how to communicate with the user" blocks written for Claude Opus 5. Add one only when the user reports the behavior it fixes, and keep it to a line.
 
 ## Pass 4 — Structure
 
@@ -68,7 +70,9 @@ Some content the user wants "in the prompt" belongs elsewhere. Flag routing in t
 ## Pass 6 — Settings advice (meta-advice, never prompt text)
 
 - Suggest an effort level when relevant. Effort is the only control over how much the model thinks, and with it latency and cost. `medium` is the API default and a strong starting point — it beats Claude Opus 5 at `high` on coding and knowledge work; `low` suits routine or latency-sensitive work; reserve `xhigh` and `max` for work where more thinking has measurably paid off. To get less thinking, lower effort rather than adding "think less" text. Effort controls thinking depth and thoroughness — **not** response length; length stays a prompt job.
-- For API-bound prompts, also advise: set `effort` explicitly rather than inheriting the default; leave `thinking` unset (`disabled` and `budget_tokens` are rejected); size `max_tokens` for thinking plus the reply; and if users should see progress during agentic turns, request `thinking.display: "updates"` (beta), because text between tool calls arrives in `thinking` blocks.
+- For a latency-sensitive route, suggest `low` first. Only if that is not enough, the line "Answer directly without deliberating." cuts thinking further — advise measuring quality before keeping it. This is the one exception to removing thinking-depth rules.
+- At `xhigh` and `max`, turns run long; mention planning for timeouts and a progress display.
+- For API-bound prompts, also advise: set `effort` explicitly rather than inheriting the default (`medium`); leave `thinking` unset (`disabled` and `budget_tokens` are rejected); size `max_tokens` for thinking plus the reply; request `thinking.display: "updates"` (beta) if users should see progress during agentic turns, because text between tool calls arrives in `thinking` blocks; declare from the first request a send-a-message tool if the model may need to hand the user exact content mid-turn, since adding tools later invalidates earlier thinking; and handle `stop_reason: "refusal"` with a fallback.
 
 ## When the output is itself a skill
 
