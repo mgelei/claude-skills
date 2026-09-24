@@ -14,7 +14,7 @@ Turn a rough prompt idea into a production-quality prompt for Claude Opus 5.5 th
 - **One-off Claude.ai prompt** (default with no signal) — a user turn ("Analyze the following…").
 - **Project instructions or custom style** — system-style, second person ("You are…", "When responding…").
 - **Skill (SKILL.md)** — YAML frontmatter with a third-person description, plus a markdown body.
-- **Other** (Claude Code or agent instructions, non-Claude models) — only when the user signals it.
+- **Other** (Claude Code or agent instructions, an API system prompt) — only when the user signals it.
 
 **Fix the mechanical, surface the material.** Apply uncontroversial best practices silently (sectioning, long inputs before the query, tighter wording, structure the idea obviously needs); they earn no list item and no commentary. The exception is a fix that would delete or reverse something the user explicitly wrote ("think step by step", "double-check your work", "CRITICAL: you MUST use the search tool"). Silently discarding a user's own words feels like being ignored, so that becomes a numbered item whose default is removal.
 

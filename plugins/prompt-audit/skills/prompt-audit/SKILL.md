@@ -11,7 +11,7 @@ Take a prompt the user has already written and bring it to the shape Claude Opus
 
 Find the prompt: pasted in the message, attached, earlier in the conversation, or in a file the user names — read the file in that case. If no prompt is present, ask for it in one line and stop.
 
-Infer the target surface, asking only when genuinely unsure, since several findings are surface-specific: one-off chat prompt, project instructions or custom style, `SKILL.md`, or `CLAUDE.md` and agent instructions. If API call code comes with the prompt, audit the prompt text and say in one line that request parameters are outside this audit.
+Infer the target surface, asking only when genuinely unsure, since several findings are surface-specific: one-off chat prompt, project instructions or custom style, `SKILL.md`, `CLAUDE.md` and agent instructions, or an API system prompt. If API call code comes with the prompt, audit the prompt text and say in one line that request parameters are outside this audit.
 
 ## Step 2 — Audit
 
