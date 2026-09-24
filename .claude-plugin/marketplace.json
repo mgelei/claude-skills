@@ -16,7 +16,7 @@
     {
       "name": "prompt-audit",
       "source": "./plugins/prompt-audit",
-      "description": "Audits an existing prompt against Claude Opus 5 practices, reports the highest-impact findings, and rewrites it on confirmation."
+      "description": "Audits an existing prompt against Claude Opus 5.5 practices, reports the highest-impact findings, and rewrites it on confirmation."
     },
     {
       "name": "bootstrap-project",
