@@ -103,7 +103,7 @@ Claude Opus 5.5 rewards a complete specification and punishes dense instruction:
 
 Strip these from the idea. When the user wrote one explicitly, surface its removal as a list item (Step 1).
 
-- **Verification and double-check instructions** — the model verifies its own work; these add cost without quality. Giving it something to check against (a test suite, a browser) is different and good.
+- **Verification and double-check instructions** — the model verifies its own work; these add cost without quality. Giving it something to check against (a test suite, a browser) is different and good. When the user asked for a check, keep what they wanted checked as a definition-of-done criterion ("every action item in the notes appears once, with its owner").
 - **Thinking instructions** — "think step by step," "think harder," "don't overthink," "answer without thinking." Thinking is always on, and its depth is the effort setting, not prompt text. Naming what the reasoning must cover ("account for time-zone changes") is context and stays.
 - **Requests to show reasoning** — "show your reasoning," `<thinking>`/`<answer>` wrappers, a required reasoning section. The model can refuse to reproduce its internal reasoning. A rationale the reader needs, such as why a recommendation wins, is content and stays.
 - **Anti-laziness exhortations** — "be thorough," "no stubs." They feed verbosity and scope creep; replace with what completeness means for this task.

@@ -59,7 +59,7 @@ Claude Opus 5.5 rewards a complete specification and punishes dense instruction,
 
 ### Remove — ranked by impact
 
-1. **Verification and double-check instructions** — "verify your work," "include a final verification step," "are you sure." They compound with built-in self-verification. Giving the model something to check against (a test suite, a linter) is different and good.
+1. **Verification and double-check instructions** — "verify your work," "include a final verification step," "are you sure." They compound with built-in self-verification. Giving the model something to check against (a test suite, a linter) is different and good. Where the line named what to check, keep that as a definition-of-done criterion rather than dropping the concern.
 2. **Requests to show reasoning** — "show your reasoning," `<thinking>`/`<answer>` wrappers, a required reasoning section. The model can refuse to reproduce its internal reasoning. "Explain why you chose this option" asks for content and stays.
 3. **Thinking instructions** — "think step by step," "think harder," "don't overthink," "answer without thinking." Thinking is always on; depth is the effort setting.
 4. **Anti-laziness exhortations** — "be thorough," "no stubs." They feed verbosity and scope creep.
